@@ -4,278 +4,137 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>WD Elevate — E-Stamp</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%;font-family:'Helvetica Neue',Arial,sans-serif;background:#0a0a0f;color:#fff;overflow-x:hidden}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Helvetica Neue',Arial,sans-serif;background:#0a0a0f;color:#fff;overflow-x:hidden}
 
-  /* ── HEADER ── */
-  .header{
-    width:100%;
-    background:linear-gradient(135deg,#0d1b3e 0%,#1a1040 50%,#2d1b69 100%);
-    padding:0;
-    text-align:center;
-    position:relative;
-    overflow:hidden;
-  }
-  .header-logo-wrap{
-    width:100%;
-    max-width:360px;
-    margin:0 auto;
-    padding:10px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .header-logo-wrap img{
-    width:100%;
-    height:auto;
-    display:block;
-    object-fit:contain;
-  }
-  .header-sub{
-    font-size:12px;
-    color:rgba(255,255,255,0.65);
-    letter-spacing:2px;
-    text-transform:uppercase;
-    padding:0 0 10px 0;
-    font-weight:600;
-  }
+.header{width:100%;background:linear-gradient(135deg,#0d1b3e 0%,#1a1040 50%,#2d1b69 100%);text-align:center;position:relative;overflow:hidden}
+.header-logo-wrap{width:100%;max-width:360px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:center}
+.header-logo-wrap img{width:100%;height:auto;display:block;object-fit:contain}
+.header-sub{font-size:12px;color:rgba(255,255,255,0.65);letter-spacing:2px;text-transform:uppercase;padding:0 0 10px;font-weight:600}
 
-  /* ── MAIN CONTENT ── */
-  .container{max-width:480px;margin:0 auto;padding:16px 14px 32px}
+.container{max-width:480px;margin:0 auto;padding:16px 14px 32px}
 
-  /* name bar */
-  .name-bar{
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:14px;
-    padding:14px 16px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:18px;
-    cursor:pointer;
-    transition:background .2s;
-  }
-  .name-bar:active{background:rgba(255,255,255,0.1)}
-  .name-bar .avatar-display{font-size:28px;flex-shrink:0}
-  .name-bar .name-text{flex:1}
-  .name-bar .name-label{font-size:10px;color:rgba(255,255,255,0.45);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
-  .name-bar .name-val{font-size:16px;font-weight:700;color:#fff}
-  .name-bar .edit-hint{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px}
-  .name-bar .chevron{color:rgba(255,255,255,0.3);font-size:18px}
+.name-bar{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:18px;cursor:pointer;transition:background .2s}
+.name-bar:active{background:rgba(255,255,255,0.1)}
+.name-bar .avatar-display{font-size:28px;flex-shrink:0}
+.name-bar .name-text{flex:1}
+.name-bar .name-label{font-size:10px;color:rgba(255,255,255,.45);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
+.name-bar .name-val{font-size:16px;font-weight:700;color:#fff}
+.name-bar .edit-hint{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
+.name-bar .chevron{color:rgba(255,255,255,.3);font-size:18px}
 
-  /* progress */
-  .progress-wrap{margin-bottom:20px}
-  .progress-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:6px;letter-spacing:1px}
-  .progress-bar{height:4px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden}
-  .progress-fill{height:100%;background:linear-gradient(90deg,#2168FD,#3AE4C9);border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.progress-wrap{margin-bottom:20px}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.45);margin-bottom:6px;letter-spacing:1px}
+.progress-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#2168FD,#3AE4C9);border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
 
-  /* jigsaw grid */
-  .jigsaw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
-  .jigsaw-piece{
-    aspect-ratio:1;
-    border-radius:16px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-    transition:transform .15s,box-shadow .15s;
-    border:2px solid transparent;
-    user-select:none;
-    -webkit-user-select:none;
-  }
-  .jigsaw-piece:active{transform:scale(0.95)}
-  .jigsaw-piece.locked{opacity:0.5;cursor:not-allowed}
-  .jigsaw-piece.stamped{border-color:rgba(255,255,255,0.25)}
-  .jigsaw-piece .piece-icon{font-size:26px;position:relative;z-index:1}
-  .jigsaw-piece .piece-name{font-size:10px;font-weight:700;letter-spacing:.5px;text-align:center;position:relative;z-index:1;line-height:1.3;padding:0 4px}
-  .jigsaw-piece .piece-status{font-size:9px;font-weight:600;position:relative;z-index:1;opacity:.8;letter-spacing:.5px}
-  .jigsaw-piece .stamp-overlay{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    background:rgba(0,0,0,0.35);backdrop-filter:blur(1px);z-index:2;
-    font-size:36px;opacity:0;transition:opacity .3s;
-  }
-  .jigsaw-piece.stamped .stamp-overlay{opacity:1}
-  .jigsaw-piece .glow{position:absolute;inset:0;opacity:0;transition:opacity .3s;z-index:0}
-  .jigsaw-piece.stamped .glow{opacity:0.15}
+.jigsaw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.jigsaw-piece{aspect-ratio:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;border:2px solid transparent;user-select:none;-webkit-user-select:none}
+.jigsaw-piece:active{transform:scale(.95)}
+.jigsaw-piece.stamped{border-color:rgba(255,255,255,.25)}
+.piece-bg{position:absolute;inset:0;z-index:0}
+.booth-smart .piece-bg{background:linear-gradient(135deg,#1c3a8a,#1c4eb4)}
+.booth-vf .piece-bg{background:linear-gradient(135deg,#5b21b6,#7c3aed)}
+.booth-tpe .piece-bg{background:linear-gradient(135deg,#065f46,#0d9488)}
+.piece-glow{position:absolute;inset:0;opacity:0;transition:opacity .3s;z-index:0}
+.jigsaw-piece.stamped .piece-glow{opacity:.15}
+.piece-icon{font-size:26px;position:relative;z-index:1}
+.piece-name{font-size:10px;font-weight:700;letter-spacing:.5px;text-align:center;position:relative;z-index:1;line-height:1.3;padding:0 4px}
+.piece-status{font-size:9px;font-weight:600;position:relative;z-index:1;opacity:.8;letter-spacing:.5px}
+.stamp-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(1px);z-index:2;font-size:36px;opacity:0;transition:opacity .3s}
+.jigsaw-piece.stamped .stamp-overlay{opacity:1}
 
-  /* booth colors */
-  .booth-smart .piece-bg{background:linear-gradient(135deg,#1c3a8a,#1c4eb4)}
-  .booth-vf .piece-bg{background:linear-gradient(135deg,#5b21b6,#7c3aed)}
-  .booth-tpe .piece-bg{background:linear-gradient(135deg,#065f46,#0d9488)}
-  .piece-bg{position:absolute;inset:0;z-index:0}
+.scan-btn{width:100%;padding:16px;border-radius:16px;border:none;background:linear-gradient(135deg,#2168FD,#3AE4C9);color:#fff;font-size:17px;font-weight:800;letter-spacing:.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .2s,transform .1s;-webkit-appearance:none}
+.scan-btn:active{opacity:.85;transform:scale(.98)}
+.scan-btn:disabled{opacity:.5;cursor:not-allowed}
 
-  /* scan button */
-  .scan-btn{
-    width:100%;padding:16px;border-radius:16px;border:none;
-    background:linear-gradient(135deg,#2168FD,#3AE4C9);
-    color:#fff;font-size:17px;font-weight:800;letter-spacing:.5px;
-    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
-    transition:opacity .2s,transform .1s;
-    -webkit-appearance:none;
-  }
-  .scan-btn:active{opacity:.85;transform:scale(.98)}
-  .scan-btn:disabled{opacity:.5;cursor:not-allowed}
-  .scan-btn svg{width:22px;height:22px}
+.complete-banner{background:linear-gradient(135deg,rgba(33,104,253,.15),rgba(58,228,201,.1));border:1px solid rgba(58,228,201,.3);border-radius:16px;padding:20px;text-align:center;margin-top:16px;display:none}
+.complete-banner.show{display:block}
+.complete-banner .cb-title{font-size:20px;font-weight:800;margin-bottom:6px;background:linear-gradient(135deg,#2168FD,#3AE4C9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.complete-banner .cb-sub{font-size:13px;color:rgba(255,255,255,.6)}
 
-  /* complete banner */
-  .complete-banner{
-    background:linear-gradient(135deg,rgba(33,104,253,.15),rgba(58,228,201,.1));
-    border:1px solid rgba(58,228,201,.3);
-    border-radius:16px;padding:20px;text-align:center;margin-top:16px;
-    display:none;
-  }
-  .complete-banner.show{display:block}
-  .complete-banner .cb-title{font-size:20px;font-weight:800;margin-bottom:6px;background:linear-gradient(135deg,#2168FD,#3AE4C9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .complete-banner .cb-sub{font-size:13px;color:rgba(255,255,255,.6)}
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-sheet{background:#141420;border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:20px 20px 40px;transform:translateY(30px);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:0 auto 18px}
+.modal-title{font-size:18px;font-weight:800;margin-bottom:4px}
+.modal-sub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:18px}
+.name-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 16px;color:#fff;font-size:16px;outline:none;font-family:inherit;transition:border-color .2s;-webkit-appearance:none}
+.name-input:focus{border-color:rgba(33,104,253,.6)}
+.input-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:8px;display:block}
+.avatar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}
+.avatar-opt{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;border:2px solid transparent;background:rgba(255,255,255,.06);transition:all .15s}
+.avatar-opt.selected{border-color:#3AE4C9;background:rgba(58,228,201,.12)}
+.avatar-opt:active{transform:scale(.9)}
+.save-btn{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#2168FD,#3AE4C9);color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:14px;-webkit-appearance:none}
+.save-btn:active{opacity:.85}
 
-  /* ── MODAL OVERLAYS ── */
-  .modal-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
-    z-index:100;display:flex;align-items:flex-end;justify-content:center;
-    opacity:0;pointer-events:none;transition:opacity .25s;
-  }
-  .modal-overlay.open{opacity:1;pointer-events:all}
-  .modal-sheet{
-    background:#141420;border-radius:24px 24px 0 0;width:100%;max-width:480px;
-    padding:20px 20px 40px;transform:translateY(30px);transition:transform .3s cubic-bezier(.4,0,.2,1);
-    max-height:85vh;overflow-y:auto;
-  }
-  .modal-overlay.open .modal-sheet{transform:translateY(0)}
-  .modal-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:0 auto 18px}
-  .modal-title{font-size:18px;font-weight:800;margin-bottom:4px}
-  .modal-sub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:18px}
+/* QR SCANNER */
+.qr-overlay{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .25s}
+.qr-overlay.open{opacity:1;pointer-events:all}
+.qr-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);padding-top:max(env(safe-area-inset-top),14px);flex-shrink:0}
+.qr-header h2{font-size:16px;font-weight:700}
+.qr-close-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;-webkit-appearance:none}
+.qr-video-wrap{flex:1;position:relative;overflow:hidden;background:#111}
+#qrVideo{width:100%;height:100%;object-fit:cover;display:block}
+.qr-frame{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.qr-box{width:220px;height:220px;border-radius:20px;border:2px solid rgba(255,255,255,.4);box-shadow:0 0 0 4000px rgba(0,0,0,.5);position:relative}
+.qr-corner{position:absolute;width:28px;height:28px;border-color:#3AE4C9;border-style:solid}
+.qr-corner.tl{top:-2px;left:-2px;border-width:4px 0 0 4px;border-radius:6px 0 0 0}
+.qr-corner.tr{top:-2px;right:-2px;border-width:4px 4px 0 0;border-radius:0 6px 0 0}
+.qr-corner.bl{bottom:-2px;left:-2px;border-width:0 0 4px 4px;border-radius:0 0 0 6px}
+.qr-corner.br{bottom:-2px;right:-2px;border-width:0 4px 4px 0;border-radius:0 0 6px 0}
+.qr-scan-line{position:absolute;left:4px;right:4px;height:2px;background:linear-gradient(90deg,transparent,#3AE4C9,transparent);animation:scanLine 2s linear infinite;top:0}
+@keyframes scanLine{0%{top:4px;opacity:1}90%{top:calc(100% - 4px);opacity:1}100%{top:calc(100% - 4px);opacity:0}}
+.qr-status{padding:16px;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);text-align:center;font-size:14px;color:rgba(255,255,255,.7);padding-bottom:max(env(safe-area-inset-bottom),16px);min-height:64px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1.5}
+.qr-status.success{color:#3AE4C9;font-weight:700}
+.qr-status.error{color:#f87171;font-weight:700}
 
-  /* name input */
-  .name-input{
-    width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
-    border-radius:12px;padding:14px 16px;color:#fff;font-size:16px;
-    outline:none;font-family:inherit;transition:border-color .2s;
-    -webkit-appearance:none;
-  }
-  .name-input:focus{border-color:rgba(33,104,253,.6)}
-  .input-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:8px;display:block}
+/* PERMISSION ERROR SCREEN */
+.perm-error{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 24px;text-align:center;gap:16px}
+.perm-error.show{display:flex}
+.perm-icon{width:64px;height:64px;border-radius:50%;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.25);display:flex;align-items:center;justify-content:center}
+.perm-title{font-size:18px;font-weight:800;color:#f87171}
+.perm-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.7;max-width:300px}
+.perm-steps{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;text-align:left;width:100%;max-width:320px}
+.perm-steps p{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.perm-steps li{font-size:13px;color:rgba(255,255,255,.75);margin:8px 0;padding-left:4px;line-height:1.5}
+.perm-steps li::before{content:attr(data-n) '. ';color:#3AE4C9;font-weight:700}
+.perm-retry-btn{padding:14px 32px;border-radius:12px;border:none;background:linear-gradient(135deg,#2168FD,#3AE4C9);color:#fff;font-size:15px;font-weight:800;cursor:pointer;-webkit-appearance:none;width:100%;max-width:320px}
 
-  /* avatar grid */
-  .avatar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}
-  .avatar-opt{
-    aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-size:24px;cursor:pointer;border:2px solid transparent;
-    background:rgba(255,255,255,.06);transition:all .15s;
-  }
-  .avatar-opt.selected{border-color:#3AE4C9;background:rgba(58,228,201,.12)}
-  .avatar-opt:active{transform:scale(.9)}
-
-  /* save btn */
-  .save-btn{
-    width:100%;padding:14px;border-radius:12px;border:none;
-    background:linear-gradient(135deg,#2168FD,#3AE4C9);
-    color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:14px;
-    -webkit-appearance:none;
-  }
-  .save-btn:active{opacity:.85}
-
-  /* ── QR SCANNER ── */
-  .qr-overlay{
-    position:fixed;inset:0;background:#000;z-index:200;
-    display:flex;flex-direction:column;
-    opacity:0;pointer-events:none;transition:opacity .25s;
-  }
-  .qr-overlay.open{opacity:1;pointer-events:all}
-  .qr-header{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:env(safe-area-inset-top,14px) 16px 12px;
-    background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
-    padding-top:max(env(safe-area-inset-top),14px);
-  }
-  .qr-header h2{font-size:16px;font-weight:700}
-  .qr-close-btn{
-    background:rgba(255,255,255,.1);border:none;color:#fff;
-    padding:8px 14px;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;
-    -webkit-appearance:none;
-  }
-  .qr-video-wrap{flex:1;position:relative;overflow:hidden}
-  #qrVideo{width:100%;height:100%;object-fit:cover;display:block}
-  .qr-frame{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    pointer-events:none;
-  }
-  .qr-box{
-    width:220px;height:220px;border-radius:20px;
-    border:3px solid rgba(255,255,255,.6);
-    box-shadow:0 0 0 4000px rgba(0,0,0,.55);
-    position:relative;
-  }
-  .qr-box::before,.qr-box::after{
-    content:'';position:absolute;width:32px;height:32px;
-    border-color:#3AE4C9;border-style:solid;
-  }
-  .qr-box::before{top:-3px;left:-3px;border-width:4px 0 0 4px;border-radius:6px 0 0 0}
-  .qr-box::after{bottom:-3px;right:-3px;border-width:0 4px 4px 0;border-radius:0 0 6px 0}
-  .qr-status{
-    padding:14px 16px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
-    text-align:center;font-size:14px;color:rgba(255,255,255,.7);
-    padding-bottom:max(env(safe-area-inset-bottom),14px);
-    min-height:60px;display:flex;align-items:center;justify-content:center;
-  }
-  .qr-status.success{color:#3AE4C9;font-weight:700}
-  .qr-status.error{color:#f87171;font-weight:700}
-
-  /* ── ADMIN ── */
-  .admin-fab{
-    position:fixed;bottom:max(env(safe-area-inset-bottom),20px);right:16px;
-    width:44px;height:44px;border-radius:50%;
-    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
-    color:rgba(255,255,255,.4);font-size:18px;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;z-index:50;
-    -webkit-appearance:none;
-  }
-  .admin-page{
-    position:fixed;inset:0;background:#0a0a0f;z-index:300;
-    display:flex;flex-direction:column;
-    transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
-  }
-  .admin-page.open{transform:translateY(0)}
-  .admin-header{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:max(env(safe-area-inset-top),20px) 16px 16px;
-    border-bottom:1px solid rgba(255,255,255,.08);background:#0a0a0f;
-    flex-shrink:0;
-  }
-  .admin-header h2{font-size:18px;font-weight:800}
-  .admin-close-btn{background:rgba(255,255,255,.08);border:none;color:#fff;padding:8px 14px;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer}
-  .admin-body{flex:1;overflow-y:auto;padding:16px}
-  .admin-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
-  .admin-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;text-align:center}
-  .admin-stat .s-num{font-size:28px;font-weight:900;background:linear-gradient(135deg,#2168FD,#3AE4C9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .admin-stat .s-lbl{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
-  .export-btn{width:100%;padding:13px;border-radius:12px;border:none;background:rgba(33,104,253,.2);border:1px solid rgba(33,104,253,.3);color:#93C5FD;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:14px}
-  .admin-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
-  .admin-table{width:100%;border-collapse:collapse;font-size:12px}
-  .admin-table th{background:rgba(255,255,255,.06);padding:10px 8px;text-align:left;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase;font-size:10px;white-space:nowrap}
-  .admin-table td{padding:10px 8px;border-top:1px solid rgba(255,255,255,.05);vertical-align:middle}
-  .admin-table tr:hover td{background:rgba(255,255,255,.03)}
-  .booth-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
-
-  /* admin login */
-  .admin-login{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 20px}
-  .admin-login-logo{width:100%;max-width:200px;margin-bottom:24px}
-  .admin-login h3{font-size:20px;font-weight:800;margin-bottom:6px}
-  .admin-login p{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:24px}
-  .admin-login .name-input{margin-bottom:12px}
-  .login-err{color:#f87171;font-size:12px;text-align:center;margin-top:8px;min-height:18px}
+/* ADMIN */
+.admin-fab{position:fixed;bottom:max(env(safe-area-inset-bottom),20px);right:16px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;-webkit-appearance:none}
+.admin-page{position:fixed;inset:0;background:#0a0a0f;z-index:300;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.admin-page.open{transform:translateY(0)}
+.admin-header{display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top),20px) 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);background:#0a0a0f;flex-shrink:0}
+.admin-header h2{font-size:18px;font-weight:800}
+.admin-close-btn{background:rgba(255,255,255,.08);border:none;color:#fff;padding:8px 14px;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer}
+.admin-body{flex:1;overflow-y:auto;padding:16px}
+.admin-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+.admin-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;text-align:center}
+.admin-stat .s-num{font-size:28px;font-weight:900;background:linear-gradient(135deg,#2168FD,#3AE4C9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.admin-stat .s-lbl{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.export-btn{width:100%;padding:13px;border-radius:12px;border:1px solid rgba(33,104,253,.3);background:rgba(33,104,253,.12);color:#93C5FD;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:14px}
+.admin-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px}
+.admin-table th{background:rgba(255,255,255,.06);padding:10px 8px;text-align:left;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase;font-size:10px;white-space:nowrap}
+.admin-table td{padding:10px 8px;border-top:1px solid rgba(255,255,255,.05);vertical-align:middle}
+.admin-table tr:hover td{background:rgba(255,255,255,.03)}
+.admin-login{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 20px}
+.admin-login-logo{width:100%;max-width:200px;margin-bottom:24px}
+.admin-login h3{font-size:20px;font-weight:800;margin-bottom:6px}
+.admin-login p{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:24px}
+.login-err{color:#f87171;font-size:12px;text-align:center;margin-top:8px;min-height:18px}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="header">
   <div class="header-logo-wrap">
     <img src="https://cdn.phototourl.com/free/2026-09-14-f1c84a9c-a648-480c-befb-349bb5382211.png" alt="WD Elevate" onerror="this.style.display='none'">
@@ -283,10 +142,7 @@
   <div class="header-sub">แสตมป์ครบ 3 บูท</div>
 </header>
 
-<!-- MAIN -->
 <div class="container">
-
-  <!-- Name Bar -->
   <div class="name-bar" onclick="openProfileModal()">
     <div class="avatar-display" id="nameAvatar">&#x1F464;</div>
     <div class="name-text">
@@ -297,7 +153,6 @@
     <div class="chevron">&#8250;</div>
   </div>
 
-  <!-- Progress -->
   <div class="progress-wrap">
     <div class="progress-label">
       <span>ความคืบหน้า</span>
@@ -306,12 +161,10 @@
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
   </div>
 
-  <!-- Jigsaw Grid -->
   <div class="jigsaw-grid">
-    <!-- Smart Engineering -->
     <div class="jigsaw-piece booth-smart" id="piece-smart" onclick="handlePieceTap('smart')">
       <div class="piece-bg"></div>
-      <div class="glow" style="background:radial-gradient(circle,#2168FD,transparent)"></div>
+      <div class="piece-glow" style="background:radial-gradient(circle,#2168FD,transparent)"></div>
       <div class="piece-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
       </div>
@@ -319,10 +172,9 @@
       <div class="piece-status" id="status-smart">แตะเพื่อสแกน</div>
       <div class="stamp-overlay">&#10003;</div>
     </div>
-    <!-- Virtual Factory -->
     <div class="jigsaw-piece booth-vf" id="piece-vf" onclick="handlePieceTap('vf')">
       <div class="piece-bg"></div>
-      <div class="glow" style="background:radial-gradient(circle,#7c3aed,transparent)"></div>
+      <div class="piece-glow" style="background:radial-gradient(circle,#7c3aed,transparent)"></div>
       <div class="piece-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
       </div>
@@ -330,10 +182,9 @@
       <div class="piece-status" id="status-vf">แตะเพื่อสแกน</div>
       <div class="stamp-overlay">&#10003;</div>
     </div>
-    <!-- TPE -->
     <div class="jigsaw-piece booth-tpe" id="piece-tpe" onclick="handlePieceTap('tpe')">
       <div class="piece-bg"></div>
-      <div class="glow" style="background:radial-gradient(circle,#0d9488,transparent)"></div>
+      <div class="piece-glow" style="background:radial-gradient(circle,#0d9488,transparent)"></div>
       <div class="piece-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       </div>
@@ -343,13 +194,11 @@
     </div>
   </div>
 
-  <!-- Scan Button -->
-  <button class="scan-btn" id="mainScanBtn" onclick="openQR()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="4" height="4" rx="1"/><line x1="19" y1="14" x2="19" y2="14"/><line x1="19" y1="19" x2="19" y2="19"/></svg>
+  <button class="scan-btn" id="mainScanBtn" onclick="startScanFlow()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="4" height="4" rx="1"/></svg>
     สแกน QR เพื่อรับแสตมป์
   </button>
 
-  <!-- Complete Banner -->
   <div class="complete-banner" id="completeBanner">
     <div class="cb-title">ยินดีด้วย! ครบทุกบูทแล้ว</div>
     <div class="cb-sub">คุณผ่านการสแกนครบทั้ง 3 บูทเรียบร้อยแล้ว</div>
@@ -370,21 +219,51 @@
   </div>
 </div>
 
-<!-- QR SCANNER -->
+<!-- QR SCANNER OVERLAY -->
 <div class="qr-overlay" id="qrOverlay">
   <div class="qr-header">
-    <h2>สแกน QR Code บูท</h2>
-    <button class="qr-close-btn" onclick="closeQR()">ปิด</button>
+    <h2>สแกน QR Code</h2>
+    <button class="qr-close-btn" id="qrCloseBtn" onclick="closeQR()">&#10005; ปิด</button>
   </div>
-  <div class="qr-video-wrap">
+
+  <!-- Normal camera view -->
+  <div class="qr-video-wrap" id="qrVideoWrap">
     <video id="qrVideo" playsinline autoplay muted></video>
-    <div class="qr-frame"><div class="qr-box"></div></div>
+    <div class="qr-frame">
+      <div class="qr-box">
+        <div class="qr-corner tl"></div>
+        <div class="qr-corner tr"></div>
+        <div class="qr-corner bl"></div>
+        <div class="qr-corner br"></div>
+        <div class="qr-scan-line"></div>
+      </div>
+    </div>
   </div>
-  <div class="qr-status" id="qrStatus">จ่อ QR Code ของบูทที่ต้องการ</div>
+
+  <!-- Permission error screen (shown instead of video) -->
+  <div class="perm-error" id="permError">
+    <div class="perm-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+    </div>
+    <div class="perm-title">ไม่สามารถเปิดกล้องได้</div>
+    <div class="perm-desc" id="permDesc">แอปต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกน QR Code</div>
+    <div class="perm-steps" id="permSteps">
+      <p>วิธีแก้ไข</p>
+      <ul style="list-style:none;padding:0">
+        <li data-n="1" id="permStep1">เปิด Settings ของมือถือ</li>
+        <li data-n="2" id="permStep2">ไปที่ Safari / Chrome</li>
+        <li data-n="3">เปิด "Camera" ให้เป็น Allow</li>
+        <li data-n="4">กลับมาที่หน้านี้แล้วกด "ลองใหม่"</li>
+      </ul>
+    </div>
+    <button class="perm-retry-btn" onclick="retryCamera()">ลองใหม่อีกครั้ง</button>
+  </div>
+
+  <div class="qr-status" id="qrStatus">จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม</div>
 </div>
 
 <!-- ADMIN FAB -->
-<button class="admin-fab" onclick="openAdmin()" title="Admin">&#9881;</button>
+<button class="admin-fab" onclick="openAdmin()">&#9881;</button>
 
 <!-- ADMIN PAGE -->
 <div class="admin-page" id="adminPage">
@@ -392,29 +271,27 @@
     <h2>Admin Dashboard</h2>
     <button class="admin-close-btn" onclick="closeAdmin()">ปิด</button>
   </div>
-  <!-- Login -->
   <div class="admin-login" id="adminLogin">
-    <img src="https://cdn.phototourl.com/free/2026-09-14-f1c84a9c-a648-480c-befb-349bb5382211.png" class="admin-login-logo" alt="WD Elevate">
+    <img src="https://cdn.phototourl.com/free/2026-09-14-f1c84a9c-a648-480c-befb-349bb5382211.png" class="admin-login-logo" alt="WD Elevate" onerror="this.style.display='none'">
     <h3>เข้าสู่ระบบ Admin</h3>
     <p>กรุณากรอกข้อมูลเพื่อเข้าใช้งาน</p>
     <input type="text" class="name-input" id="adminUser" placeholder="Username" autocomplete="off">
-    <input type="password" class="name-input" id="adminPass" placeholder="Password" style="margin-top:10px">
+    <input type="password" class="name-input" id="adminPass" placeholder="Password" style="margin-top:10px" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="save-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
     <div class="login-err" id="loginErr"></div>
   </div>
-  <!-- Dashboard -->
-  <div id="adminDash" style="display:none;flex-direction:column;height:100%">
+  <div id="adminDash" style="display:none;flex-direction:column;flex:1;overflow:hidden">
     <div class="admin-body">
       <div class="admin-stat-row">
         <div class="admin-stat"><div class="s-num" id="statTotal">0</div><div class="s-lbl">ผู้เข้าร่วมทั้งหมด</div></div>
         <div class="admin-stat"><div class="s-num" id="statComplete">0</div><div class="s-lbl">ครบทุกบูท</div></div>
-        <div class="admin-stat"><div class="s-num" id="statSmart">0</div><div class="s-lbl">Smart Engineering</div></div>
+        <div class="admin-stat"><div class="s-num" id="statSmart">0</div><div class="s-lbl">Smart Eng.</div></div>
         <div class="admin-stat"><div class="s-num" id="statVF">0</div><div class="s-lbl">Virtual Factory</div></div>
       </div>
       <button class="export-btn" onclick="exportCSV()">&#8615; Export CSV</button>
       <div class="admin-table-wrap">
         <table class="admin-table">
-          <thead><tr><th>Avatar</th><th>ชื่อ</th><th>Smart</th><th>Virtual</th><th>TPE</th><th>เวลา</th></tr></thead>
+          <thead><tr><th>Av.</th><th>ชื่อ</th><th>Smart</th><th>VF</th><th>TPE</th><th>เวลา</th></tr></thead>
           <tbody id="adminTableBody"></tbody>
         </table>
       </div>
@@ -426,9 +303,9 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
 const BOOTHS = {
-  smart: { name:'Smart Engineering', qr:'WD-ELEVATE-BOOTH-SMART-ENGINEERING', form:'https://app.smartsheet.com/b/form/019e5cb0006a750581e77cbf2eb672a7', color:'#1c4eb4' },
-  vf:    { name:'Virtual Factory',    qr:'WD-ELEVATE-BOOTH-VIRTUAL-FACTORY',    form:'https://app.smartsheet.com/b/form/019e5ca730d8763fa0d4f065bec45209', color:'#7c3aed' },
-  tpe:   { name:'TPE',                qr:'WD-ELEVATE-BOOTH-TPE',                form:'https://app.smartsheet.com/b/form/019e5cab0ea07e49b8ddd44a065064b7', color:'#0d9488' }
+  smart:{ name:'Smart Engineering', qr:'WD-ELEVATE-BOOTH-SMART-ENGINEERING', form:'https://app.smartsheet.com/b/form/019e5cb0006a750581e77cbf2eb672a7', color:'#1c4eb4' },
+  vf:   { name:'Virtual Factory',   qr:'WD-ELEVATE-BOOTH-VIRTUAL-FACTORY',   form:'https://app.smartsheet.com/b/form/019e5ca730d8763fa0d4f065bec45209', color:'#7c3aed' },
+  tpe:  { name:'TPE',               qr:'WD-ELEVATE-BOOTH-TPE',               form:'https://app.smartsheet.com/b/form/019e5cab0ea07e49b8ddd44a065064b7', color:'#0d9488' }
 };
 
 const AVATARS = ['&#x1F600;','&#x1F603;','&#x1F604;','&#x1F60A;','&#x1F60E;','&#x1F9D1;','&#x1F468;','&#x1F469;','&#x1F9D9;','&#x1F9B8;'];
@@ -442,12 +319,61 @@ let scanInterval = null;
 let scanLocked = false;
 let videoWaitInterval = null;
 let scanBtnLocked = false;
+let adminAuthed = false;
 
-// ── Init avatar grid ──
+/* ── detect browser for permission guidance ── */
+function detectBrowser(){
+  const ua = navigator.userAgent;
+  if(/iPhone|iPad|iPod/.test(ua)) return 'ios';
+  if(/Android/.test(ua)){
+    if(/Chrome/.test(ua)) return 'android-chrome';
+    if(/Samsung/.test(ua)) return 'android-samsung';
+    return 'android';
+  }
+  return 'desktop';
+}
+
+function setPermSteps(errMsg){
+  const br = detectBrowser();
+  const s1 = document.getElementById('permStep1');
+  const s2 = document.getElementById('permStep2');
+  const desc = document.getElementById('permDesc');
+
+  let errLower = (errMsg||'').toLowerCase();
+  if(errLower.includes('not found') || errLower.includes('notfound')){
+    desc.textContent = 'ไม่พบกล้องในอุปกรณ์นี้ กรุณาลองบนมือถือที่มีกล้อง';
+    document.getElementById('permSteps').style.display = 'none';
+    return;
+  }
+  if(errLower.includes('https') || errLower.includes('secure')){
+    desc.textContent = 'กล้องต้องการการเชื่อมต่อ HTTPS — กรุณาเปิดผ่าน https:// เท่านั้น';
+    document.getElementById('permSteps').style.display = 'none';
+    return;
+  }
+
+  desc.textContent = 'แอปต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกน QR Code';
+  document.getElementById('permSteps').style.display = '';
+
+  if(br === 'ios'){
+    s1.textContent = 'ไปที่ Settings > Safari (หรือแอปที่เปิดหน้านี้)';
+    s2.textContent = 'เลือก Camera แล้วเปลี่ยนเป็น "Allow"';
+  } else if(br === 'android-chrome'){
+    s1.textContent = 'แตะไอคอนกุญแจ/กล้อง ในแถบ URL ด้านบน';
+    s2.textContent = 'เลือก Camera > Allow แล้ว Reload หน้า';
+  } else if(br === 'android-samsung'){
+    s1.textContent = 'แตะไอคอน i ในแถบ URL ของ Samsung Browser';
+    s2.textContent = 'เลือก Camera > Allow';
+  } else {
+    s1.textContent = 'คลิกไอคอนกล้องในแถบ address bar';
+    s2.textContent = 'เปลี่ยน Camera permission เป็น Allow';
+  }
+}
+
+/* ── Avatar grid ── */
 function initAvatarGrid(){
   const g = document.getElementById('avatarGrid');
   g.innerHTML = '';
-  AVATARS.forEach((av,i) => {
+  AVATARS.forEach(av => {
     const d = document.createElement('div');
     d.className = 'avatar-opt' + (av === userAvatar ? ' selected' : '');
     d.innerHTML = av;
@@ -480,114 +406,180 @@ document.getElementById('profileModal').addEventListener('click', function(e){
   if(e.target === this) this.classList.remove('open');
 });
 
-// ── Piece tap ──
+/* ── Piece tap ── */
 function handlePieceTap(booth){
-  if(stamps[booth]){ alert(BOOTHS[booth].name + ' สแกนแล้ว!'); return; }
-  openQR();
+  if(stamps[booth]){ return; }
+  startScanFlow();
 }
 
-// ── Progress ──
+/* ── Progress ── */
 function updateProgress(){
   const done = Object.values(stamps).filter(Boolean).length;
-  const pct = (done/3)*100;
-  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressFill').style.width = (done/3*100) + '%';
   document.getElementById('progressText').textContent = done + ' / 3 บูท';
   if(done === 3) document.getElementById('completeBanner').classList.add('show');
 }
 
-// ── QR Scanner ──
-function openQR(){
+/* ── SCAN FLOW ── */
+function startScanFlow(){
   if(scanBtnLocked) return;
+  if(!userName){ openProfileModal(); return; }
   scanBtnLocked = true;
-  setTimeout(()=>{ scanBtnLocked = false; }, 1500);
+  setTimeout(()=>{ scanBtnLocked = false; }, 2000);
+  openQR();
+}
 
-  if(!userName){
-    openProfileModal();
-    scanBtnLocked = false;
+function openQR(){
+  document.getElementById('qrOverlay').classList.add('open');
+  document.getElementById('qrVideoWrap').style.display = 'block';
+  document.getElementById('permError').classList.remove('show');
+  document.getElementById('qrStatus').textContent = 'กำลังเปิดกล้อง...';
+  document.getElementById('qrStatus').className = 'qr-status';
+  requestCamera();
+}
+
+function requestCamera(){
+  /* Check API availability */
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    showPermError('getUserMedia API ไม่รองรับ — กรุณาใช้ Chrome หรือ Safari เวอร์ชันล่าสุด');
     return;
   }
-  document.getElementById('qrOverlay').classList.add('open');
-  document.getElementById('qrStatus').textContent = 'จ่อ QR Code ของบูทที่ต้องการ';
-  document.getElementById('qrStatus').className = 'qr-status';
-  startCamera();
-}
 
-function startCamera(){
-  const constraints = { video:{ facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720} }, audio:false };
+  /* iOS Safari requires getUserMedia to be called from a user gesture.
+     We call it here (this function is always triggered by a button tap). */
+  const constraints = {
+    video: {
+      facingMode: { ideal: 'environment' },
+      width:  { ideal: 1280 },
+      height: { ideal: 720 }
+    },
+    audio: false
+  };
+
   navigator.mediaDevices.getUserMedia(constraints)
-    .then(s => {
-      stream = s;
-      const vid = document.getElementById('qrVideo');
-      vid.srcObject = s;
-      let waited = 0;
-      videoWaitInterval = setInterval(() => {
-        waited += 100;
-        if(vid.readyState >= 2){
-          clearInterval(videoWaitInterval);
-          videoWaitInterval = null;
-          startScan();
-        } else if(waited > 8000){
-          clearInterval(videoWaitInterval);
-          videoWaitInterval = null;
-          document.getElementById('qrStatus').textContent = 'ไม่สามารถเปิดกล้องได้';
-          document.getElementById('qrStatus').className = 'qr-status error';
-        }
-      }, 100);
-    })
-    .catch(err => {
-      document.getElementById('qrStatus').textContent = 'ไม่สามารถเปิดกล้องได้: ' + err.message;
-      document.getElementById('qrStatus').className = 'qr-status error';
-      scanBtnLocked = false;
-    });
+    .then(handleStream)
+    .catch(handleCameraError);
 }
 
-function startScan(){
+function handleStream(s){
+  stream = s;
+  const vid = document.getElementById('qrVideo');
+  vid.srcObject = s;
+
+  /* Ensure video plays on iOS */
+  vid.setAttribute('playsinline', true);
+  vid.setAttribute('muted', true);
+  vid.muted = true;
+
+  const playPromise = vid.play();
+  if(playPromise !== undefined){
+    playPromise.catch(()=>{});
+  }
+
+  document.getElementById('qrStatus').textContent = 'จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม';
+
+  let waited = 0;
+  videoWaitInterval = setInterval(() => {
+    waited += 100;
+    if(vid.readyState >= 2 && vid.videoWidth > 0){
+      clearInterval(videoWaitInterval);
+      videoWaitInterval = null;
+      startDecode();
+    } else if(waited > 10000){
+      clearInterval(videoWaitInterval);
+      videoWaitInterval = null;
+      showPermError('กล้องเปิดช้าเกินไป — กรุณาลองใหม่');
+    }
+  }, 100);
+}
+
+function handleCameraError(err){
+  scanBtnLocked = false;
+  let msg = err.message || err.name || String(err);
+  console.warn('[QR] camera error:', err.name, err.message);
+
+  /* Map DOMException names to human-readable hints */
+  if(err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError'){
+    msg = 'Permission denied';
+  } else if(err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError'){
+    msg = 'not found';
+  } else if(err.name === 'NotReadableError' || err.name === 'TrackStartError'){
+    msg = 'กล้องถูกใช้งานโดยแอปอื่นอยู่ — ปิดแอปอื่นที่ใช้กล้องแล้วลองใหม่';
+  } else if(err.name === 'OverconstrainedError'){
+    /* Retry with simpler constraints */
+    navigator.mediaDevices.getUserMedia({ video:true, audio:false })
+      .then(handleStream)
+      .catch(e => showPermError(e.message));
+    return;
+  } else if(err.name === 'TypeError'){
+    msg = 'https';
+  }
+
+  showPermError(msg);
+}
+
+function showPermError(msg){
+  document.getElementById('qrVideoWrap').style.display = 'none';
+  document.getElementById('qrStatus').style.display = 'none';
+  const pe = document.getElementById('permError');
+  pe.classList.add('show');
+  setPermSteps(msg);
+  stopStream();
+}
+
+function retryCamera(){
+  document.getElementById('permError').classList.remove('show');
+  document.getElementById('qrVideoWrap').style.display = 'block';
+  document.getElementById('qrStatus').style.display = '';
+  document.getElementById('qrStatus').textContent = 'กำลังเปิดกล้อง...';
+  document.getElementById('qrStatus').className = 'qr-status';
+  requestCamera();
+}
+
+function startDecode(){
   const vid = document.getElementById('qrVideo');
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   scanInterval = setInterval(() => {
-    if(scanLocked || vid.readyState < 2) return;
+    if(scanLocked) return;
+    if(vid.readyState < 2 || vid.videoWidth === 0) return;
     canvas.width = vid.videoWidth;
     canvas.height = vid.videoHeight;
     ctx.drawImage(vid, 0, 0);
-    const img = ctx.getImageData(0,0,canvas.width,canvas.height);
-    const code = jsQR(img.data, img.width, img.height, { inversionAttempts:'dontInvert' });
-    if(code) handleQRCode(code.data);
-  }, 200);
+    try {
+      const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const code = jsQR(img.data, img.width, img.height, { inversionAttempts:'dontInvert' });
+      if(code) handleQRCode(code.data);
+    } catch(e){}
+  }, 250);
 }
 
 function handleQRCode(data){
   if(scanLocked) return;
   const booth = Object.keys(BOOTHS).find(k => BOOTHS[k].qr === data);
+
   if(!booth){
     scanLocked = true;
-    document.getElementById('qrStatus').textContent = 'QR Code ไม่ถูกต้อง';
-    document.getElementById('qrStatus').className = 'qr-status error';
-    if(navigator.vibrate) navigator.vibrate([100,50,100]);
-    setTimeout(() => {
-      scanLocked = false;
-      document.getElementById('qrStatus').textContent = 'จ่อ QR Code ของบูทที่ต้องการ';
-      document.getElementById('qrStatus').className = 'qr-status';
-    }, 2000);
+    setQRStatus('QR Code ไม่ถูกต้อง — กรุณาสแกน QR ของบูท WD Elevate', 'error');
+    if(navigator.vibrate) navigator.vibrate([80,40,80]);
+    setTimeout(()=>{ scanLocked = false; setQRStatus('จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม',''); }, 2200);
     return;
   }
+
   if(stamps[booth]){
     scanLocked = true;
-    document.getElementById('qrStatus').textContent = BOOTHS[booth].name + ' สแกนแล้ว!';
-    document.getElementById('qrStatus').className = 'qr-status error';
-    setTimeout(() => {
-      scanLocked = false;
-      document.getElementById('qrStatus').textContent = 'จ่อ QR Code ของบูทที่ต้องการ';
-      document.getElementById('qrStatus').className = 'qr-status';
-    }, 2000);
+    setQRStatus(BOOTHS[booth].name + ' สแกนแล้ว!', 'error');
+    setTimeout(()=>{ scanLocked = false; setQRStatus('จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม',''); }, 2200);
     return;
   }
+
   scanLocked = true;
-  if(navigator.vibrate) navigator.vibrate(200);
-  document.getElementById('qrStatus').textContent = 'สแกนสำเร็จ! ' + BOOTHS[booth].name;
-  document.getElementById('qrStatus').className = 'qr-status success';
-  setTimeout(() => { window.open(BOOTHS[booth].form, '_blank'); }, 600);
-  setTimeout(() => {
+  if(navigator.vibrate) navigator.vibrate(220);
+  setQRStatus('สแกนสำเร็จ! ' + BOOTHS[booth].name, 'success');
+
+  setTimeout(()=>{ window.open(BOOTHS[booth].form,'_blank'); }, 600);
+
+  setTimeout(()=>{
     stamps[booth] = true;
     document.getElementById('piece-'+booth).classList.add('stamped');
     document.getElementById('status-'+booth).textContent = 'สแกนแล้ว';
@@ -596,29 +588,42 @@ function handleQRCode(data){
     scanRecords.push(rec);
     sendToSheet(rec);
     closeQR();
-  }, 1200);
+  }, 1400);
 }
 
-function closeQR(){
-  document.getElementById('qrOverlay').classList.remove('open');
+function setQRStatus(msg, cls){
+  const el = document.getElementById('qrStatus');
+  el.textContent = msg;
+  el.className = 'qr-status' + (cls ? ' '+cls : '');
+}
+
+function stopStream(){
   if(scanInterval){ clearInterval(scanInterval); scanInterval = null; }
   if(videoWaitInterval){ clearInterval(videoWaitInterval); videoWaitInterval = null; }
   if(stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
   const vid = document.getElementById('qrVideo');
   vid.srcObject = null;
+}
+
+function closeQR(){
+  stopStream();
   scanLocked = false;
   scanBtnLocked = false;
+  document.getElementById('qrOverlay').classList.remove('open');
+  document.getElementById('qrStatus').style.display = '';
+  document.getElementById('qrVideoWrap').style.display = 'block';
+  document.getElementById('permError').classList.remove('show');
 }
 
 function sendToSheet(rec){
   const body = new URLSearchParams({ name:rec.name, booth:rec.boothName, time:rec.time, avatar:rec.avatar });
-  fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', body }).catch(()=>{});
+  fetch(SCRIPT_URL,{ method:'POST', mode:'no-cors', body }).catch(()=>{});
 }
 
-// ── Admin ──
-let adminAuthed = false;
+/* ── Admin ── */
 function openAdmin(){ document.getElementById('adminPage').classList.add('open'); }
 function closeAdmin(){ document.getElementById('adminPage').classList.remove('open'); }
+
 function doLogin(){
   const u = document.getElementById('adminUser').value.trim();
   const p = document.getElementById('adminPass').value;
@@ -632,27 +637,33 @@ function doLogin(){
     document.getElementById('loginErr').textContent = 'Username หรือ Password ไม่ถูกต้อง';
   }
 }
+
 function renderAdminDash(){
   const names = [...new Set(scanRecords.map(r=>r.name))];
   document.getElementById('statTotal').textContent = names.length;
-  const complete = names.filter(n => {
+  const complete = names.filter(n=>{
     const recs = scanRecords.filter(r=>r.name===n);
-    return ['smart','vf','tpe'].every(b => recs.some(r=>r.booth===b));
+    return ['smart','vf','tpe'].every(b=>recs.some(r=>r.booth===b));
   });
   document.getElementById('statComplete').textContent = complete.length;
   document.getElementById('statSmart').textContent = scanRecords.filter(r=>r.booth==='smart').length;
   document.getElementById('statVF').textContent = scanRecords.filter(r=>r.booth==='vf').length;
   const tbody = document.getElementById('adminTableBody');
   tbody.innerHTML = '';
-  scanRecords.forEach(r => {
+  scanRecords.forEach(r=>{
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td style="font-size:18px">${r.avatar}</td><td>${r.name}</td><td>${r.booth==='smart'?'<span style="color:#93C5FD">&#10003;</span>':''}</td><td>${r.booth==='vf'?'<span style="color:#c4b5fd">&#10003;</span>':''}</td><td>${r.booth==='tpe'?'<span style="color:#5eead4">&#10003;</span>':''}</td><td style="color:rgba(255,255,255,.45);font-size:10px">${r.time}</td>`;
+    tr.innerHTML = '<td style="font-size:18px">'+r.avatar+'</td><td>'+r.name+'</td>'
+      +'<td>'+(r.booth==='smart'?'<span style="color:#93C5FD">&#10003;</span>':'')+'</td>'
+      +'<td>'+(r.booth==='vf'?'<span style="color:#c4b5fd">&#10003;</span>':'')+'</td>'
+      +'<td>'+(r.booth==='tpe'?'<span style="color:#5eead4">&#10003;</span>':'')+'</td>'
+      +'<td style="color:rgba(255,255,255,.4);font-size:10px">'+r.time+'</td>';
     tbody.appendChild(tr);
   });
 }
+
 function exportCSV(){
   const rows = [['Avatar','Name','Booth','Time']];
-  scanRecords.forEach(r => rows.push([r.avatar, r.name, r.boothName, r.time]));
+  scanRecords.forEach(r=>rows.push([r.avatar, r.name, r.boothName, r.time]));
   const csv = rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
