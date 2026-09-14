@@ -5,671 +5,4391 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <title>WD Elevate — E-Stamp</title>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;font-family:'Helvetica Neue',Arial,sans-serif;background:#0a0a0f;color:#fff;overflow-x:hidden}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent
+}
 
-.header{width:100%;background:linear-gradient(135deg,#0d1b3e 0%,#1a1040 50%,#2d1b69 100%);text-align:center;position:relative;overflow:hidden}
-.header-logo-wrap{width:100%;max-width:360px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:center}
-.header-logo-wrap img{width:100%;height:auto;display:block;object-fit:contain}
-.header-sub{font-size:12px;color:rgba(255,255,255,0.65);letter-spacing:2px;text-transform:uppercase;padding:0 0 10px;font-weight:600}
+html,body{
+  min-height:100%;
+  font-family:'Helvetica Neue',Arial,sans-serif;
+  background:#0a0a0f;
+  color:#fff;
+  overflow-x:hidden
+}
 
-.container{max-width:480px;margin:0 auto;padding:16px 14px 32px}
+body{
+  padding-bottom:20px
+}
 
-.name-bar{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:18px;cursor:pointer;transition:background .2s}
-.name-bar:active{background:rgba(255,255,255,0.1)}
-.name-bar .avatar-display{font-size:28px;flex-shrink:0}
-.name-bar .name-text{flex:1}
-.name-bar .name-label{font-size:10px;color:rgba(255,255,255,.45);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
-.name-bar .name-val{font-size:16px;font-weight:700;color:#fff}
-.name-bar .edit-hint{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
-.name-bar .chevron{color:rgba(255,255,255,.3);font-size:18px}
+/* ================= HEADER ================= */
 
-.progress-wrap{margin-bottom:20px}
-.progress-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.45);margin-bottom:6px;letter-spacing:1px}
-.progress-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,#2168FD,#3AE4C9);border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.header{
+  width:100%;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(33,104,253,.25),transparent 35%),
+    radial-gradient(circle at 80% 30%,rgba(124,58,237,.25),transparent 35%),
+    linear-gradient(135deg,#0d1b3e 0%,#1a1040 50%,#2d1b69 100%);
+  text-align:center;
+  position:relative;
+  overflow:hidden
+}
 
-.jigsaw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
-.jigsaw-piece{aspect-ratio:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;border:2px solid transparent;user-select:none;-webkit-user-select:none}
-.jigsaw-piece:active{transform:scale(.95)}
-.jigsaw-piece.stamped{border-color:rgba(255,255,255,.25)}
-.piece-bg{position:absolute;inset:0;z-index:0}
-.booth-smart .piece-bg{background:linear-gradient(135deg,#1c3a8a,#1c4eb4)}
-.booth-vf .piece-bg{background:linear-gradient(135deg,#5b21b6,#7c3aed)}
-.booth-tpe .piece-bg{background:linear-gradient(135deg,#065f46,#0d9488)}
-.piece-glow{position:absolute;inset:0;opacity:0;transition:opacity .3s;z-index:0}
-.jigsaw-piece.stamped .piece-glow{opacity:.15}
-.piece-icon{font-size:26px;position:relative;z-index:1}
-.piece-name{font-size:10px;font-weight:700;letter-spacing:.5px;text-align:center;position:relative;z-index:1;line-height:1.3;padding:0 4px}
-.piece-status{font-size:9px;font-weight:600;position:relative;z-index:1;opacity:.8;letter-spacing:.5px}
-.stamp-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(1px);z-index:2;font-size:36px;opacity:0;transition:opacity .3s}
-.jigsaw-piece.stamped .stamp-overlay{opacity:1}
+.header:after{
+  content:"";
+  position:absolute;
+  width:250px;
+  height:250px;
+  border-radius:50%;
+  background:rgba(58,228,201,.08);
+  right:-100px;
+  top:-100px
+}
 
-.scan-btn{width:100%;padding:16px;border-radius:16px;border:none;background:linear-gradient(135deg,#2168FD,#3AE4C9);color:#fff;font-size:17px;font-weight:800;letter-spacing:.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .2s,transform .1s;-webkit-appearance:none}
-.scan-btn:active{opacity:.85;transform:scale(.98)}
-.scan-btn:disabled{opacity:.5;cursor:not-allowed}
+.header-logo-wrap{
+  width:100%;
+  max-width:360px;
+  margin:0 auto;
+  padding:10px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:2
+}
 
-.complete-banner{background:linear-gradient(135deg,rgba(33,104,253,.15),rgba(58,228,201,.1));border:1px solid rgba(58,228,201,.3);border-radius:16px;padding:20px;text-align:center;margin-top:16px;display:none}
-.complete-banner.show{display:block}
-.complete-banner .cb-title{font-size:20px;font-weight:800;margin-bottom:6px;background:linear-gradient(135deg,#2168FD,#3AE4C9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.complete-banner .cb-sub{font-size:13px;color:rgba(255,255,255,.6)}
+.header-logo-wrap img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:contain
+}
 
-/* MODALS */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal-sheet{background:#141420;border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:20px 20px 40px;transform:translateY(30px);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto}
-.modal-overlay.open .modal-sheet{transform:translateY(0)}
-.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:0 auto 18px}
-.modal-title{font-size:18px;font-weight:800;margin-bottom:4px}
-.modal-sub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:18px}
-.name-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 16px;color:#fff;font-size:16px;outline:none;font-family:inherit;transition:border-color .2s;-webkit-appearance:none}
-.name-input:focus{border-color:rgba(33,104,253,.6)}
-.input-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:8px;display:block}
-.avatar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}
-.avatar-opt{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;border:2px solid transparent;background:rgba(255,255,255,.06);transition:all .15s}
-.avatar-opt.selected{border-color:#3AE4C9;background:rgba(58,228,201,.12)}
-.avatar-opt:active{transform:scale(.9)}
-.save-btn{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#2168FD,#3AE4C9);color:#fff;font-size:16px;font-weight:800;cursor:pointer;margin-top:14px;-webkit-appearance:none}
-.save-btn:active{opacity:.85}
+.header-sub{
+  font-size:12px;
+  color:rgba(255,255,255,.65);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:0 0 10px;
+  font-weight:600;
+  position:relative;
+  z-index:2
+}
 
-/* QR SCANNER */
-.qr-overlay{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .25s}
-.qr-overlay.open{opacity:1;pointer-events:all}
-.qr-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);padding-top:max(env(safe-area-inset-top),14px);flex-shrink:0}
-.qr-header h2{font-size:16px;font-weight:700}
-.qr-close-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;-webkit-appearance:none}
-.qr-video-wrap{flex:1;position:relative;overflow:hidden;background:#111}
-#qrVideo{width:100%;height:100%;object-fit:cover;display:block}
-.qr-frame{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.qr-box{width:220px;height:220px;border-radius:20px;border:2px solid rgba(255,255,255,.4);box-shadow:0 0 0 4000px rgba(0,0,0,.5);position:relative}
-.qr-corner{position:absolute;width:28px;height:28px;border-color:#3AE4C9;border-style:solid}
-.qr-corner.tl{top:-2px;left:-2px;border-width:4px 0 0 4px;border-radius:6px 0 0 0}
-.qr-corner.tr{top:-2px;right:-2px;border-width:4px 4px 0 0;border-radius:0 6px 0 0}
-.qr-corner.bl{bottom:-2px;left:-2px;border-width:0 0 4px 4px;border-radius:0 0 0 6px}
-.qr-corner.br{bottom:-2px;right:-2px;border-width:0 4px 4px 0;border-radius:0 0 6px 0}
-.qr-scan-line{position:absolute;left:4px;right:4px;height:2px;background:linear-gradient(90deg,transparent,#3AE4C9,transparent);animation:scanLine 2s linear infinite;top:0}
-@keyframes scanLine{0%{top:4px;opacity:1}90%{top:calc(100% - 4px);opacity:1}100%{top:calc(100% - 4px);opacity:0}}
-.qr-status{padding:16px;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);text-align:center;font-size:14px;color:rgba(255,255,255,.7);padding-bottom:max(env(safe-area-inset-bottom),16px);min-height:64px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1.5}
-.qr-status.success{color:#3AE4C9;font-weight:700}
-.qr-status.error{color:#f87171;font-weight:700}
+/* ================= CONTAINER ================= */
 
-/* PERMISSION ERROR SCREEN */
-.perm-error{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 24px;text-align:center;gap:16px}
-.perm-error.show{display:flex}
-.perm-icon{width:64px;height:64px;border-radius:50%;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.25);display:flex;align-items:center;justify-content:center}
-.perm-title{font-size:18px;font-weight:800;color:#f87171}
-.perm-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.7;max-width:300px}
-.perm-steps{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;text-align:left;width:100%;max-width:320px}
-.perm-steps p{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-.perm-steps li{font-size:13px;color:rgba(255,255,255,.75);margin:8px 0;padding-left:4px;line-height:1.5}
-.perm-steps li::before{content:attr(data-n) '. ';color:#3AE4C9;font-weight:700}
-.perm-retry-btn{padding:14px 32px;border-radius:12px;border:none;background:linear-gradient(135deg,#2168FD,#3AE4C9);color:#fff;font-size:15px;font-weight:800;cursor:pointer;-webkit-appearance:none;width:100%;max-width:320px}
+.container{
+  max-width:480px;
+  margin:0 auto;
+  padding:16px 14px 40px
+}
 
-/* ADMIN */
-.admin-fab{position:fixed;bottom:max(env(safe-area-inset-bottom),20px);right:16px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;-webkit-appearance:none}
-.admin-page{position:fixed;inset:0;background:#0a0a0f;z-index:300;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
-.admin-page.open{transform:translateY(0)}
-.admin-header{display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top),20px) 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);background:#0a0a0f;flex-shrink:0}
-.admin-header h2{font-size:18px;font-weight:800}
-.admin-close-btn{background:rgba(255,255,255,.08);border:none;color:#fff;padding:8px 14px;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer}
-.admin-body{flex:1;overflow-y:auto;padding:16px}
-.admin-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
-.admin-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;text-align:center}
-.admin-stat .s-num{font-size:28px;font-weight:900;background:linear-gradient(135deg,#2168FD,#3AE4C9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.admin-stat .s-lbl{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
-.export-btn{width:100%;padding:13px;border-radius:12px;border:1px solid rgba(33,104,253,.3);background:rgba(33,104,253,.12);color:#93C5FD;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:14px}
-.admin-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
-.admin-table{width:100%;border-collapse:collapse;font-size:12px}
-.admin-table th{background:rgba(255,255,255,.06);padding:10px 8px;text-align:left;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase;font-size:10px;white-space:nowrap}
-.admin-table td{padding:10px 8px;border-top:1px solid rgba(255,255,255,.05);vertical-align:middle}
-.admin-table tr:hover td{background:rgba(255,255,255,.03)}
-.admin-login{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 20px}
-.admin-login-logo{width:100%;max-width:200px;margin-bottom:24px}
-.admin-login h3{font-size:20px;font-weight:800;margin-bottom:6px}
-.admin-login p{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:24px}
-.login-err{color:#f87171;font-size:12px;text-align:center;margin-top:8px;min-height:18px}
+/* ================= PROFILE ================= */
+
+.name-bar{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+  cursor:pointer;
+  transition:background .2s
+}
+
+.name-bar:active{
+  background:rgba(255,255,255,.1)
+}
+
+.name-bar .avatar-display{
+  font-size:28px;
+  flex-shrink:0
+}
+
+.name-bar .name-text{
+  flex:1
+}
+
+.name-bar .name-label{
+  font-size:10px;
+  color:rgba(255,255,255,.45);
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:2px
+}
+
+.name-bar .name-val{
+  font-size:16px;
+  font-weight:700;
+  color:#fff
+}
+
+.name-bar .edit-hint{
+  font-size:11px;
+  color:rgba(255,255,255,.35);
+  margin-top:2px
+}
+
+.name-bar .chevron{
+  color:rgba(255,255,255,.3);
+  font-size:18px
+}
+
+/* ================= PROGRESS ================= */
+
+.progress-wrap{
+  margin-bottom:20px
+}
+
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  color:rgba(255,255,255,.45);
+  margin-bottom:6px;
+  letter-spacing:1px
+}
+
+.progress-bar{
+  height:5px;
+  background:rgba(255,255,255,.08);
+  border-radius:4px;
+  overflow:hidden
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#2168FD,#3AE4C9);
+  border-radius:4px;
+  transition:width .6s cubic-bezier(.4,0,.2,1)
+}
+
+/* ================= JIGSAW ================= */
+
+.jigsaw-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:24px
+}
+
+.jigsaw-piece{
+  aspect-ratio:1;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:transform .15s,box-shadow .15s;
+  border:2px solid transparent;
+  user-select:none;
+  -webkit-user-select:none
+}
+
+.jigsaw-piece:active{
+  transform:scale(.95)
+}
+
+.jigsaw-piece.stamped{
+  border-color:rgba(255,255,255,.45);
+  box-shadow:0 0 22px rgba(58,228,201,.15)
+}
+
+.piece-bg{
+  position:absolute;
+  inset:0;
+  z-index:0
+}
+
+.booth-smart .piece-bg{
+  background:linear-gradient(135deg,#1c3a8a,#1c4eb4)
+}
+
+.booth-vf .piece-bg{
+  background:linear-gradient(135deg,#5b21b6,#7c3aed)
+}
+
+.booth-tpe .piece-bg{
+  background:linear-gradient(135deg,#a16207,#ca8a04)
+}
+
+.piece-glow{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity .3s;
+  z-index:0
+}
+
+.jigsaw-piece.stamped .piece-glow{
+  opacity:.25
+}
+
+.piece-icon{
+  font-size:26px;
+  position:relative;
+  z-index:1
+}
+
+.piece-name{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.5px;
+  text-align:center;
+  position:relative;
+  z-index:1;
+  line-height:1.3;
+  padding:0 4px
+}
+
+.piece-status{
+  font-size:9px;
+  font-weight:600;
+  position:relative;
+  z-index:1;
+  opacity:.8;
+  letter-spacing:.5px
+}
+
+.stamp-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.42);
+  backdrop-filter:blur(2px);
+  z-index:2;
+  font-size:42px;
+  color:#3AE4C9;
+  font-weight:900;
+  opacity:0;
+  transition:opacity .3s
+}
+
+.jigsaw-piece.stamped .stamp-overlay{
+  opacity:1
+}
+
+/* ================= SCAN BUTTON ================= */
+
+.scan-btn{
+  width:100%;
+  padding:16px;
+  border-radius:16px;
+  border:none;
+  background:linear-gradient(135deg,#2168FD,#3AE4C9);
+  color:#fff;
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:.5px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  transition:opacity .2s,transform .1s;
+  -webkit-appearance:none;
+  box-shadow:0 8px 25px rgba(33,104,253,.2)
+}
+
+.scan-btn:active{
+  opacity:.85;
+  transform:scale(.98)
+}
+
+.scan-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed
+}
+
+/* ================= COMPLETE ================= */
+
+.complete-banner{
+  background:
+    linear-gradient(135deg,rgba(33,104,253,.15),rgba(58,228,201,.1));
+  border:1px solid rgba(58,228,201,.3);
+  border-radius:16px;
+  padding:20px;
+  text-align:center;
+  margin-top:16px;
+  display:none
+}
+
+.complete-banner.show{
+  display:block;
+  animation:completePop .5s ease
+}
+
+@keyframes completePop{
+  from{
+    opacity:0;
+    transform:translateY(10px)
+  }
+  to{
+    opacity:1;
+    transform:translateY(0)
+  }
+}
+
+.complete-banner .cb-title{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:6px;
+  background:linear-gradient(135deg,#2168FD,#3AE4C9);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent
+}
+
+.complete-banner .cb-sub{
+  font-size:13px;
+  color:rgba(255,255,255,.6)
+}
+
+/* ================= MODALS ================= */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(6px);
+  z-index:100;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s
+}
+
+.modal-overlay.open{
+  opacity:1;
+  pointer-events:all
+}
+
+.modal-sheet{
+  background:#141420;
+  border-radius:24px 24px 0 0;
+  width:100%;
+  max-width:480px;
+  padding:20px 20px 40px;
+  transform:translateY(30px);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  max-height:85vh;
+  overflow-y:auto
+}
+
+.modal-overlay.open .modal-sheet{
+  transform:translateY(0)
+}
+
+.modal-handle{
+  width:36px;
+  height:4px;
+  background:rgba(255,255,255,.2);
+  border-radius:2px;
+  margin:0 auto 18px
+}
+
+.modal-title{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:4px
+}
+
+.modal-sub{
+  font-size:12px;
+  color:rgba(255,255,255,.4);
+  margin-bottom:18px
+}
+
+.name-input{
+  width:100%;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:12px;
+  padding:14px 16px;
+  color:#fff;
+  font-size:16px;
+  outline:none;
+  font-family:inherit;
+  transition:border-color .2s;
+  -webkit-appearance:none
+}
+
+.name-input:focus{
+  border-color:rgba(33,104,253,.6)
+}
+
+.input-label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.45);
+  margin-bottom:8px;
+  display:block
+}
+
+.avatar-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  margin:14px 0
+}
+
+.avatar-opt{
+  aspect-ratio:1;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  cursor:pointer;
+  border:2px solid transparent;
+  background:rgba(255,255,255,.06);
+  transition:all .15s
+}
+
+.avatar-opt.selected{
+  border-color:#3AE4C9;
+  background:rgba(58,228,201,.12)
+}
+
+.avatar-opt:active{
+  transform:scale(.9)
+}
+
+.save-btn{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  background:linear-gradient(135deg,#2168FD,#3AE4C9);
+  color:#fff;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  margin-top:14px;
+  -webkit-appearance:none
+}
+
+/* ================= QR SCANNER ================= */
+
+.qr-overlay{
+  position:fixed;
+  inset:0;
+  background:#000;
+  z-index:200;
+  display:flex;
+  flex-direction:column;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s
+}
+
+.qr-overlay.open{
+  opacity:1;
+  pointer-events:all
+}
+
+.qr-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px 12px;
+  background:rgba(0,0,0,.8);
+  backdrop-filter:blur(8px);
+  padding-top:max(env(safe-area-inset-top),14px);
+  flex-shrink:0
+}
+
+.qr-header h2{
+  font-size:16px;
+  font-weight:700
+}
+
+.qr-close-btn{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;
+  padding:8px 16px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer
+}
+
+.qr-video-wrap{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  background:#111
+}
+
+#qrVideo{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block
+}
+
+.qr-frame{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none
+}
+
+.qr-box{
+  width:240px;
+  height:240px;
+  border-radius:20px;
+  border:2px solid rgba(255,255,255,.4);
+  box-shadow:0 0 0 4000px rgba(0,0,0,.5);
+  position:relative
+}
+
+.qr-corner{
+  position:absolute;
+  width:30px;
+  height:30px;
+  border-color:#3AE4C9;
+  border-style:solid
+}
+
+.qr-corner.tl{
+  top:-2px;
+  left:-2px;
+  border-width:4px 0 0 4px;
+  border-radius:6px 0 0 0
+}
+
+.qr-corner.tr{
+  top:-2px;
+  right:-2px;
+  border-width:4px 4px 0 0;
+  border-radius:0 6px 0 0
+}
+
+.qr-corner.bl{
+  bottom:-2px;
+  left:-2px;
+  border-width:0 0 4px 4px;
+  border-radius:0 0 0 6px
+}
+
+.qr-corner.br{
+  bottom:-2px;
+  right:-2px;
+  border-width:0 4px 4px 0;
+  border-radius:0 0 6px 0
+}
+
+.qr-scan-line{
+  position:absolute;
+  left:4px;
+  right:4px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#3AE4C9,transparent);
+  animation:scanLine 2s linear infinite;
+  top:0
+}
+
+@keyframes scanLine{
+  0%{
+    top:4px;
+    opacity:1
+  }
+  90%{
+    top:calc(100% - 4px);
+    opacity:1
+  }
+  100%{
+    top:calc(100% - 4px);
+    opacity:0
+  }
+}
+
+.qr-status{
+  padding:16px;
+  background:rgba(0,0,0,.8);
+  backdrop-filter:blur(8px);
+  text-align:center;
+  font-size:14px;
+  color:rgba(255,255,255,.7);
+  padding-bottom:max(env(safe-area-inset-bottom),16px);
+  min-height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  line-height:1.5
+}
+
+.qr-status.success{
+  color:#3AE4C9;
+  font-weight:700
+}
+
+.qr-status.error{
+  color:#f87171;
+  font-weight:700
+}
+
+/* ================= PERMISSION ================= */
+
+.perm-error{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex:1;
+  padding:32px 24px;
+  text-align:center;
+  gap:16px
+}
+
+.perm-error.show{
+  display:flex
+}
+
+.perm-icon{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:rgba(248,113,113,.12);
+  border:1px solid rgba(248,113,113,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.perm-title{
+  font-size:18px;
+  font-weight:800;
+  color:#f87171
+}
+
+.perm-desc{
+  font-size:13px;
+  color:rgba(255,255,255,.5);
+  line-height:1.7;
+  max-width:300px
+}
+
+.perm-steps{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;
+  padding:16px;
+  text-align:left;
+  width:100%;
+  max-width:320px
+}
+
+.perm-steps p{
+  font-size:12px;
+  color:rgba(255,255,255,.6);
+  margin-bottom:6px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase
+}
+
+.perm-steps li{
+  font-size:13px;
+  color:rgba(255,255,255,.75);
+  margin:8px 0;
+  padding-left:4px;
+  line-height:1.5
+}
+
+.perm-steps li::before{
+  content:attr(data-n) '. ';
+  color:#3AE4C9;
+  font-weight:700
+}
+
+.perm-retry-btn{
+  padding:14px 32px;
+  border-radius:12px;
+  border:none;
+  background:linear-gradient(135deg,#2168FD,#3AE4C9);
+  color:#fff;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  width:100%;
+  max-width:320px
+}
+
+/* ================= ADMIN ================= */
+
+.admin-fab{
+  position:fixed;
+  bottom:max(env(safe-area-inset-bottom),20px);
+  right:16px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.4);
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:50
+}
+
+.admin-page{
+  position:fixed;
+  inset:0;
+  background:#0a0a0f;
+  z-index:300;
+  display:flex;
+  flex-direction:column;
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1)
+}
+
+.admin-page.open{
+  transform:translateY(0)
+}
+
+.admin-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:max(env(safe-area-inset-top),20px) 16px 16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:#0a0a0f;
+  flex-shrink:0
+}
+
+.admin-header h2{
+  font-size:18px;
+  font-weight:800
+}
+
+.admin-close-btn{
+  background:rgba(255,255,255,.08);
+  border:none;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer
+}
+
+.admin-body{
+  flex:1;
+  overflow-y:auto;
+  padding:16px
+}
+
+.admin-stat-row{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:18px
+}
+
+.admin-stat{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:14px;
+  text-align:center
+}
+
+.admin-stat .s-num{
+  font-size:28px;
+  font-weight:900;
+  background:linear-gradient(135deg,#2168FD,#3AE4C9);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent
+}
+
+.admin-stat .s-lbl{
+  font-size:10px;
+  color:rgba(255,255,255,.4);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-top:2px
+}
+
+.admin-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:14px
+}
+
+.export-btn,
+.reset-btn{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700
+}
+
+.export-btn{
+  border:1px solid rgba(33,104,253,.3);
+  background:rgba(33,104,253,.12);
+  color:#93C5FD
+}
+
+.reset-btn{
+  border:1px solid rgba(248,113,113,.25);
+  background:rgba(248,113,113,.08);
+  color:#fca5a5
+}
+
+.admin-table-wrap{
+  overflow-x:auto;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.08)
+}
+
+.admin-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px
+}
+
+.admin-table th{
+  background:rgba(255,255,255,.06);
+  padding:10px 8px;
+  text-align:left;
+  font-weight:700;
+  color:rgba(255,255,255,.5);
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  font-size:10px;
+  white-space:nowrap
+}
+
+.admin-table td{
+  padding:10px 8px;
+  border-top:1px solid rgba(255,255,255,.05);
+  vertical-align:middle
+}
+
+.admin-table tr:hover td{
+  background:rgba(255,255,255,.03)
+}
+
+.admin-login{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex:1;
+  padding:32px 20px
+}
+
+.admin-login-logo{
+  width:100%;
+  max-width:200px;
+  margin-bottom:24px
+}
+
+.admin-login h3{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:6px
+}
+
+.admin-login p{
+  font-size:13px;
+  color:rgba(255,255,255,.4);
+  margin-bottom:24px
+}
+
+.login-err{
+  color:#f87171;
+  font-size:12px;
+  text-align:center;
+  margin-top:8px;
+  min-height:18px
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translate(-50%,20px);
+  background:#171722;
+  border:1px solid rgba(255,255,255,.12);
+  color:#fff;
+  padding:13px 18px;
+  border-radius:30px;
+  font-size:13px;
+  font-weight:700;
+  z-index:999;
+  opacity:0;
+  pointer-events:none;
+  transition:all .3s;
+  white-space:nowrap;
+  max-width:90%;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0)
+}
+
+.toast.success{
+  border-color:rgba(58,228,201,.4);
+  color:#5eead4
+}
+
+.toast.error{
+  border-color:rgba(248,113,113,.4);
+  color:#fca5a5
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:360px){
+  .jigsaw-grid{
+    gap:7px
+  }
+
+  .piece-name{
+    font-size:9px
+  }
+
+  .qr-box{
+    width:210px;
+    height:210px
+  }
+}
 </style>
 </head>
+
 <body>
 
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
 <header class="header">
+
   <div class="header-logo-wrap">
-    <img src="https://cdn.phototourl.com/free/2026-09-14-f1c84a9c-a648-480c-befb-349bb5382211.png" alt="WD Elevate" onerror="this.style.display='none'">
+    <img
+      src="https://cdn.phototourl.com/free/2026-09-14-f1c84a9c-a648-480c-befb-349bb5382211.png"
+      alt="WD Elevate"
+      onerror="this.style.display='none'"
+    >
   </div>
-  <div class="header-sub">แสตมป์ครบ 3 บูท</div>
+
+  <div class="header-sub">
+    แสตมป์ครบ 3 บูท
+  </div>
+
 </header>
 
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
 <div class="container">
+
+  <!-- PROFILE -->
+
   <div class="name-bar" onclick="openProfileModal()">
-    <div class="avatar-display" id="nameAvatar">&#x1F464;</div>
-    <div class="name-text">
-      <div class="name-label">ผู้เข้าร่วม</div>
-      <div class="name-val" id="displayName">กรอกชื่อของคุณ</div>
-      <div class="edit-hint" id="editHint">แตะเพื่อแก้ไข</div>
+
+    <div class="avatar-display" id="nameAvatar">
+      &#x1F464;
     </div>
-    <div class="chevron">&#8250;</div>
+
+    <div class="name-text">
+
+      <div class="name-label">
+        ผู้เข้าร่วม
+      </div>
+
+      <div class="name-val" id="displayName">
+        กรอกชื่อของคุณ
+      </div>
+
+      <div class="edit-hint" id="editHint">
+        แตะเพื่อแก้ไข
+      </div>
+
+    </div>
+
+    <div class="chevron">
+      &#8250;
+    </div>
+
   </div>
+
+
+  <!-- PROGRESS -->
 
   <div class="progress-wrap">
+
     <div class="progress-label">
-      <span>ความคืบหน้า</span>
-      <span id="progressText">0 / 3 บูท</span>
+
+      <span>
+        ความคืบหน้า
+      </span>
+
+      <span id="progressText">
+        0 / 3 บูท
+      </span>
+
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="progress-bar">
+
+      <div
+        class="progress-fill"
+        id="progressFill"
+      ></div>
+
+    </div>
+
   </div>
+
+
+  <!-- THREE BOOTHS -->
 
   <div class="jigsaw-grid">
-    <div class="jigsaw-piece booth-smart" id="piece-smart" onclick="handlePieceTap('smart')">
+
+    <!-- SMART -->
+
+    <div
+      class="jigsaw-piece booth-smart"
+      id="piece-smart"
+      onclick="handlePieceTap('smart')"
+    >
+
       <div class="piece-bg"></div>
-      <div class="piece-glow" style="background:radial-gradient(circle,#2168FD,transparent)"></div>
+
+      <div
+        class="piece-glow"
+        style="background:radial-gradient(circle,#2168FD,transparent)"
+      ></div>
+
       <div class="piece-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#93C5FD"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <circle cx="12" cy="12" r="3"/>
+
+          <path d="M12 2v4"/>
+          <path d="M12 18v4"/>
+          <path d="M4.93 4.93l2.83 2.83"/>
+          <path d="M16.24 16.24l2.83 2.83"/>
+          <path d="M2 12h4"/>
+          <path d="M18 12h4"/>
+          <path d="M4.93 19.07l2.83-2.83"/>
+          <path d="M16.24 7.76l2.83-2.83"/>
+
+        </svg>
+
       </div>
-      <div class="piece-name">Smart<br>Engineering</div>
-      <div class="piece-status" id="status-smart">แตะเพื่อสแกน</div>
-      <div class="stamp-overlay">&#10003;</div>
+
+      <div class="piece-name">
+        Smart<br>Engineering
+      </div>
+
+      <div
+        class="piece-status"
+        id="status-smart"
+      >
+        แตะเพื่อสแกน
+      </div>
+
+      <div class="stamp-overlay">
+        &#10003;
+      </div>
+
     </div>
-    <div class="jigsaw-piece booth-vf" id="piece-vf" onclick="handlePieceTap('vf')">
+
+
+    <!-- VIRTUAL FACTORY -->
+
+    <div
+      class="jigsaw-piece booth-vf"
+      id="piece-vf"
+      onclick="handlePieceTap('vf')"
+    >
+
       <div class="piece-bg"></div>
-      <div class="piece-glow" style="background:radial-gradient(circle,#7c3aed,transparent)"></div>
+
+      <div
+        class="piece-glow"
+        style="background:radial-gradient(circle,#7c3aed,transparent)"
+      ></div>
+
       <div class="piece-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#c4b5fd"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <rect
+            x="2"
+            y="7"
+            width="20"
+            height="13"
+            rx="2"
+          />
+
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+
+          <line x1="12" y1="12" x2="12" y2="16"/>
+          <line x1="10" y1="14" x2="14" y2="14"/>
+
+        </svg>
+
       </div>
-      <div class="piece-name">Virtual<br>Factory</div>
-      <div class="piece-status" id="status-vf">แตะเพื่อสแกน</div>
-      <div class="stamp-overlay">&#10003;</div>
+
+      <div class="piece-name">
+        Virtual<br>Factory
+      </div>
+
+      <div
+        class="piece-status"
+        id="status-vf"
+      >
+        แตะเพื่อสแกน
+      </div>
+
+      <div class="stamp-overlay">
+        &#10003;
+      </div>
+
     </div>
-    <div class="jigsaw-piece booth-tpe" id="piece-tpe" onclick="handlePieceTap('tpe')">
+
+
+    <!-- TPE -->
+
+    <div
+      class="jigsaw-piece booth-tpe"
+      id="piece-tpe"
+      onclick="handlePieceTap('tpe')"
+    >
+
       <div class="piece-bg"></div>
-      <div class="piece-glow" style="background:radial-gradient(circle,#0d9488,transparent)"></div>
+
+      <div
+        class="piece-glow"
+        style="background:radial-gradient(circle,#facc15,transparent)"
+      ></div>
+
       <div class="piece-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#fde68a"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+
+          <circle
+            cx="9"
+            cy="7"
+            r="4"
+          />
+
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+
+        </svg>
+
       </div>
-      <div class="piece-name">TPE</div>
-      <div class="piece-status" id="status-tpe">แตะเพื่อสแกน</div>
-      <div class="stamp-overlay">&#10003;</div>
+
+      <div class="piece-name">
+        TPE
+      </div>
+
+      <div
+        class="piece-status"
+        id="status-tpe"
+      >
+        แตะเพื่อสแกน
+      </div>
+
+      <div class="stamp-overlay">
+        &#10003;
+      </div>
+
     </div>
+
   </div>
 
-  <button class="scan-btn" id="mainScanBtn" onclick="startScanFlow()">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="4" height="4" rx="1"/></svg>
+
+  <!-- SCAN BUTTON -->
+
+  <button
+    class="scan-btn"
+    id="mainScanBtn"
+    onclick="startScanFlow()"
+  >
+
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+
+      <rect
+        x="3"
+        y="3"
+        width="7"
+        height="7"
+        rx="1"
+      />
+
+      <rect
+        x="14"
+        y="3"
+        width="7"
+        height="7"
+        rx="1"
+      />
+
+      <rect
+        x="3"
+        y="14"
+        width="7"
+        height="7"
+        rx="1"
+      />
+
+      <rect
+        x="14"
+        y="14"
+        width="4"
+        height="4"
+        rx="1"
+      />
+
+    </svg>
+
     สแกน QR เพื่อรับแสตมป์
+
   </button>
 
-  <div class="complete-banner" id="completeBanner">
-    <div class="cb-title">ยินดีด้วย! ครบทุกบูทแล้ว</div>
-    <div class="cb-sub">คุณผ่านการสแกนครบทั้ง 3 บูทเรียบร้อยแล้ว</div>
+
+  <!-- COMPLETE -->
+
+  <div
+    class="complete-banner"
+    id="completeBanner"
+  >
+
+    <div class="cb-title">
+      🎉 ยินดีด้วย! ครบทุกบูทแล้ว
+    </div>
+
+    <div class="cb-sub">
+      คุณผ่านการสแกนครบทั้ง 3 บูทเรียบร้อยแล้ว
+    </div>
+
   </div>
+
 </div>
 
-<!-- PROFILE MODAL -->
-<div class="modal-overlay" id="profileModal">
+
+<!-- =========================================================
+     PROFILE MODAL
+========================================================= -->
+
+<div
+  class="modal-overlay"
+  id="profileModal"
+>
+
   <div class="modal-sheet">
+
     <div class="modal-handle"></div>
-    <div class="modal-title">ตั้งค่าโปรไฟล์</div>
-    <div class="modal-sub">เลือกอวตารและกรอกชื่อของคุณ</div>
-    <label class="input-label">เลือกอวตาร</label>
-    <div class="avatar-grid" id="avatarGrid"></div>
-    <label class="input-label" for="nameField">ชื่อ - นามสกุล</label>
-    <input type="text" class="name-input" id="nameField" placeholder="เช่น สมชาย ใจดี" maxlength="40">
-    <button class="save-btn" onclick="saveProfile()">บันทึก</button>
+
+    <div class="modal-title">
+      ตั้งค่าโปรไฟล์
+    </div>
+
+    <div class="modal-sub">
+      เลือกอวตารและกรอกชื่อของคุณ
+    </div>
+
+    <label class="input-label">
+      เลือกอวตาร
+    </label>
+
+    <div
+      class="avatar-grid"
+      id="avatarGrid"
+    ></div>
+
+    <label
+      class="input-label"
+      for="nameField"
+    >
+      ชื่อ - นามสกุล
+    </label>
+
+    <input
+      type="text"
+      class="name-input"
+      id="nameField"
+      placeholder="เช่น สมชาย ใจดี"
+      maxlength="40"
+      autocomplete="name"
+    >
+
+    <button
+      class="save-btn"
+      onclick="saveProfile()"
+    >
+      บันทึก
+    </button>
+
   </div>
+
 </div>
 
-<!-- QR SCANNER OVERLAY -->
-<div class="qr-overlay" id="qrOverlay">
+
+<!-- =========================================================
+     QR SCANNER
+========================================================= -->
+
+<div
+  class="qr-overlay"
+  id="qrOverlay"
+>
+
   <div class="qr-header">
-    <h2>สแกน QR Code</h2>
-    <button class="qr-close-btn" id="qrCloseBtn" onclick="closeQR()">&#10005; ปิด</button>
+
+    <h2>
+      สแกน QR Code
+    </h2>
+
+    <button
+      class="qr-close-btn"
+      onclick="closeQR()"
+    >
+      &#10005; ปิด
+    </button>
+
   </div>
 
-  <!-- Normal camera view -->
-  <div class="qr-video-wrap" id="qrVideoWrap">
-    <video id="qrVideo" playsinline autoplay muted></video>
+
+  <div
+    class="qr-video-wrap"
+    id="qrVideoWrap"
+  >
+
+    <video
+      id="qrVideo"
+      playsinline
+      autoplay
+      muted
+    ></video>
+
     <div class="qr-frame">
+
       <div class="qr-box">
+
         <div class="qr-corner tl"></div>
         <div class="qr-corner tr"></div>
         <div class="qr-corner bl"></div>
         <div class="qr-corner br"></div>
+
         <div class="qr-scan-line"></div>
+
       </div>
+
     </div>
+
   </div>
 
-  <!-- Permission error screen (shown instead of video) -->
-  <div class="perm-error" id="permError">
+
+  <!-- CAMERA ERROR -->
+
+  <div
+    class="perm-error"
+    id="permError"
+  >
+
     <div class="perm-icon">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#f87171"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+
+        <circle cx="12" cy="13" r="4"/>
+
+        <line
+          x1="1"
+          y1="1"
+          x2="23"
+          y2="23"
+        />
+
+      </svg>
+
     </div>
-    <div class="perm-title">ไม่สามารถเปิดกล้องได้</div>
-    <div class="perm-desc" id="permDesc">แอปต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกน QR Code</div>
-    <div class="perm-steps" id="permSteps">
-      <p>วิธีแก้ไข</p>
+
+    <div class="perm-title">
+      ไม่สามารถเปิดกล้องได้
+    </div>
+
+    <div
+      class="perm-desc"
+      id="permDesc"
+    >
+      แอปต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกน QR Code
+    </div>
+
+    <div
+      class="perm-steps"
+      id="permSteps"
+    >
+
+      <p>
+        วิธีแก้ไข
+      </p>
+
       <ul style="list-style:none;padding:0">
-        <li data-n="1" id="permStep1">เปิด Settings ของมือถือ</li>
-        <li data-n="2" id="permStep2">ไปที่ Safari / Chrome</li>
-        <li data-n="3">เปิด "Camera" ให้เป็น Allow</li>
-        <li data-n="4">กลับมาที่หน้านี้แล้วกด "ลองใหม่"</li>
+
+        <li
+          data-n="1"
+          id="permStep1"
+        >
+          เปิด Settings ของมือถือ
+        </li>
+
+        <li
+          data-n="2"
+          id="permStep2"
+        >
+          ไปที่ Safari / Chrome
+        </li>
+
+        <li data-n="3">
+          เปิด Camera ให้เป็น Allow
+        </li>
+
+        <li data-n="4">
+          กลับมาที่หน้านี้แล้วกด "ลองใหม่"
+        </li>
+
       </ul>
+
     </div>
-    <button class="perm-retry-btn" onclick="retryCamera()">ลองใหม่อีกครั้ง</button>
+
+    <button
+      class="perm-retry-btn"
+      onclick="retryCamera()"
+    >
+      ลองใหม่อีกครั้ง
+    </button>
+
   </div>
 
-  <div class="qr-status" id="qrStatus">จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม</div>
+
+  <div
+    class="qr-status"
+    id="qrStatus"
+  >
+    จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม
+  </div>
+
 </div>
 
-<!-- ADMIN FAB -->
-<button class="admin-fab" onclick="openAdmin()">&#9881;</button>
 
-<!-- ADMIN PAGE -->
-<div class="admin-page" id="adminPage">
+<!-- =========================================================
+     ADMIN BUTTON
+========================================================= -->
+
+<button
+  class="admin-fab"
+  onclick="openAdmin()"
+  aria-label="Admin"
+>
+  &#9881;
+</button>
+
+
+<!-- =========================================================
+     ADMIN PAGE
+========================================================= -->
+
+<div
+  class="admin-page"
+  id="adminPage"
+>
+
   <div class="admin-header">
-    <h2>Admin Dashboard</h2>
-    <button class="admin-close-btn" onclick="closeAdmin()">ปิด</button>
+
+    <h2>
+      Admin Dashboard
+    </h2>
+
+    <button
+      class="admin-close-btn"
+      onclick="closeAdmin()"
+    >
+      ปิด
+    </button>
+
   </div>
-  <div class="admin-login" id="adminLogin">
-    <img src="https://cdn.phototourl.com/free/2026-09-14-f1c84a9c-a648-480c-befb-349bb5382211.png" class="admin-login-logo" alt="WD Elevate" onerror="this.style.display='none'">
-    <h3>เข้าสู่ระบบ Admin</h3>
-    <p>กรุณากรอกข้อมูลเพื่อเข้าใช้งาน</p>
-    <input type="text" class="name-input" id="adminUser" placeholder="Username" autocomplete="off">
-    <input type="password" class="name-input" id="adminPass" placeholder="Password" style="margin-top:10px" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="save-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
-    <div class="login-err" id="loginErr"></div>
+
+
+  <!-- LOGIN -->
+
+  <div
+    class="admin-login"
+    id="adminLogin"
+  >
+
+    <img
+      src="https://cdn.phototourl.com/free/2026-09-14-f1c84a9c-a648-480c-befb-349bb5382211.png"
+      class="admin-login-logo"
+      alt="WD Elevate"
+      onerror="this.style.display='none'"
+    >
+
+    <h3>
+      เข้าสู่ระบบ Admin
+    </h3>
+
+    <p>
+      กรุณากรอกข้อมูลเพื่อเข้าใช้งาน
+    </p>
+
+    <input
+      type="text"
+      class="name-input"
+      id="adminUser"
+      placeholder="Username"
+      autocomplete="off"
+    >
+
+    <input
+      type="password"
+      class="name-input"
+      id="adminPass"
+      placeholder="Password"
+      style="margin-top:10px"
+      onkeydown="if(event.key==='Enter')doLogin()"
+    >
+
+    <button
+      class="save-btn"
+      onclick="doLogin()"
+    >
+      เข้าสู่ระบบ
+    </button>
+
+    <div
+      class="login-err"
+      id="loginErr"
+    ></div>
+
   </div>
-  <div id="adminDash" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+
+
+  <!-- DASHBOARD -->
+
+  <div
+    id="adminDash"
+    style="display:none;flex-direction:column;flex:1;overflow:hidden"
+  >
+
     <div class="admin-body">
+
+      <!-- STAT -->
+
       <div class="admin-stat-row">
-        <div class="admin-stat"><div class="s-num" id="statTotal">0</div><div class="s-lbl">ผู้เข้าร่วมทั้งหมด</div></div>
-        <div class="admin-stat"><div class="s-num" id="statComplete">0</div><div class="s-lbl">ครบทุกบูท</div></div>
-        <div class="admin-stat"><div class="s-num" id="statSmart">0</div><div class="s-lbl">Smart Eng.</div></div>
-        <div class="admin-stat"><div class="s-num" id="statVF">0</div><div class="s-lbl">Virtual Factory</div></div>
+
+        <div class="admin-stat">
+
+          <div
+            class="s-num"
+            id="statTotal"
+          >
+            0
+          </div>
+
+          <div class="s-lbl">
+            ผู้เข้าร่วมทั้งหมด
+          </div>
+
+        </div>
+
+
+        <div class="admin-stat">
+
+          <div
+            class="s-num"
+            id="statComplete"
+          >
+            0
+          </div>
+
+          <div class="s-lbl">
+            ครบทุกบูท
+          </div>
+
+        </div>
+
+
+        <div class="admin-stat">
+
+          <div
+            class="s-num"
+            id="statSmart"
+          >
+            0
+          </div>
+
+          <div class="s-lbl">
+            Smart Eng.
+          </div>
+
+        </div>
+
+
+        <div class="admin-stat">
+
+          <div
+            class="s-num"
+            id="statVF"
+          >
+            0
+          </div>
+
+          <div class="s-lbl">
+            Virtual Factory
+          </div>
+
+        </div>
+
+
+        <div class="admin-stat">
+
+          <div
+            class="s-num"
+            id="statTPE"
+          >
+            0
+          </div>
+
+          <div class="s-lbl">
+            TPE
+          </div>
+
+        </div>
+
       </div>
-      <button class="export-btn" onclick="exportCSV()">&#8615; Export CSV</button>
+
+
+      <!-- ACTIONS -->
+
+      <div class="admin-actions">
+
+        <button
+          class="export-btn"
+          onclick="exportCSV()"
+        >
+          &#8615; Export CSV
+        </button>
+
+        <button
+          class="reset-btn"
+          onclick="resetAllData()"
+        >
+          &#10005; Reset Data
+        </button>
+
+      </div>
+
+
+      <!-- TABLE -->
+
       <div class="admin-table-wrap">
+
         <table class="admin-table">
-          <thead><tr><th>Av.</th><th>ชื่อ</th><th>Smart</th><th>VF</th><th>TPE</th><th>เวลา</th></tr></thead>
-          <tbody id="adminTableBody"></tbody>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Av.
+              </th>
+
+              <th>
+                ชื่อ
+              </th>
+
+              <th>
+                Smart
+              </th>
+
+              <th>
+                VF
+              </th>
+
+              <th>
+                TPE
+              </th>
+
+              <th>
+                เวลา
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody
+            id="adminTableBody"
+          ></tbody>
+
         </table>
+
       </div>
+
     </div>
+
   </div>
+
 </div>
+
+
+<!-- TOAST -->
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
+/*
+ * ถ้ามี Google Apps Script Web App
+ * ให้นำ URL มาใส่ตรงนี้
+ *
+ * ตัวอย่าง:
+ * const SCRIPT_URL =
+ * 'https://script.google.com/macros/s/XXXXXXXX/exec';
+ *
+ * ถ้ายังไม่มี ให้ปล่อยเป็น '' ได้
+ */
+
+const SCRIPT_URL = '';
+
+
+/* =========================================================
+   BOOTH CONFIG
+========================================================= */
 
 const BOOTHS = {
-  smart:{ name:'Smart Engineering', qr:'WD-ELEVATE-BOOTH-SMART-ENGINEERING', form:'https://app.smartsheet.com/b/form/019e5cb0006a750581e77cbf2eb672a7', color:'#1c4eb4' },
-  vf:   { name:'Virtual Factory',   qr:'WD-ELEVATE-BOOTH-VIRTUAL-FACTORY',   form:'https://app.smartsheet.com/b/form/019e5ca730d8763fa0d4f065bec45209', color:'#7c3aed' },
-  tpe:  { name:'TPE',               qr:'WD-ELEVATE-BOOTH-TPE',               form:'https://app.smartsheet.com/b/form/019e5cab0ea07e49b8ddd44a065064b7', color:'#0d9488' }
+
+  smart:{
+
+    name:'Smart Engineering',
+
+    qr:'WD-ELEVATE-BOOTH-SMART-ENGINEERING',
+
+    form:
+      'https://app.smartsheet.com/b/form/019e5cb0006a750581e77cbf2eb672a7',
+
+    color:'#1c4eb4'
+
+  },
+
+
+  vf:{
+
+    name:'Virtual Factory',
+
+    qr:'WD-ELEVATE-BOOTH-VIRTUAL-FACTORY',
+
+    form:
+      'https://app.smartsheet.com/b/form/019e5ca730d8763fa0d4f065bec45209',
+
+    color:'#7c3aed'
+
+  },
+
+
+  tpe:{
+
+    name:'TPE',
+
+    qr:'WD-ELEVATE-BOOTH-TPE',
+
+    form:
+      'https://app.smartsheet.com/b/form/019e5cab0ea07e49b8ddd44a065064b7',
+
+    color:'#ca8a04'
+
+  }
+
 };
 
-const AVATARS = ['&#x1F600;','&#x1F603;','&#x1F604;','&#x1F60A;','&#x1F60E;','&#x1F9D1;','&#x1F468;','&#x1F469;','&#x1F9D9;','&#x1F9B8;'];
+
+/* =========================================================
+   AVATARS
+========================================================= */
+
+const AVATARS = [
+
+  '&#x1F600;',
+  '&#x1F603;',
+  '&#x1F604;',
+  '&#x1F60A;',
+  '&#x1F60E;',
+  '&#x1F9D1;',
+  '&#x1F468;',
+  '&#x1F469;',
+  '&#x1F9D9;',
+  '&#x1F9B8;'
+
+];
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+const STORAGE_KEY =
+  'wd_elevate_stamp_v3';
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
 
 let userName = '';
-let userAvatar = '&#x1F464;';
-let stamps = { smart:false, vf:false, tpe:false };
+
+let userAvatar =
+  '&#x1F464;';
+
+let stamps = {
+
+  smart:false,
+  vf:false,
+  tpe:false
+
+};
+
 let scanRecords = [];
+
 let stream = null;
+
 let scanInterval = null;
+
 let scanLocked = false;
+
 let videoWaitInterval = null;
+
 let scanBtnLocked = false;
+
 let adminAuthed = false;
 
-/* ── detect browser for permission guidance ── */
-function detectBrowser(){
-  const ua = navigator.userAgent;
-  if(/iPhone|iPad|iPod/.test(ua)) return 'ios';
-  if(/Android/.test(ua)){
-    if(/Chrome/.test(ua)) return 'android-chrome';
-    if(/Samsung/.test(ua)) return 'android-samsung';
-    return 'android';
+let currentScanBooth = null;
+
+
+/* =========================================================
+   LOAD STORAGE
+========================================================= */
+
+function loadStorage(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(STORAGE_KEY);
+
+    if(!saved) return;
+
+    const data =
+      JSON.parse(saved);
+
+    if(data.userName){
+      userName = data.userName;
+    }
+
+    if(data.userAvatar){
+      userAvatar = data.userAvatar;
+    }
+
+    if(data.stamps){
+      stamps = {
+
+        smart:!!data.stamps.smart,
+        vf:!!data.stamps.vf,
+        tpe:!!data.stamps.tpe
+
+      };
+    }
+
+    if(Array.isArray(data.scanRecords)){
+      scanRecords =
+        data.scanRecords;
+    }
+
+  }catch(e){
+
+    console.warn(
+      'Storage load error',
+      e
+    );
+
   }
-  return 'desktop';
+
 }
 
-function setPermSteps(errMsg){
-  const br = detectBrowser();
-  const s1 = document.getElementById('permStep1');
-  const s2 = document.getElementById('permStep2');
-  const desc = document.getElementById('permDesc');
 
-  let errLower = (errMsg||'').toLowerCase();
-  if(errLower.includes('not found') || errLower.includes('notfound')){
-    desc.textContent = 'ไม่พบกล้องในอุปกรณ์นี้ กรุณาลองบนมือถือที่มีกล้อง';
-    document.getElementById('permSteps').style.display = 'none';
-    return;
-  }
-  if(errLower.includes('https') || errLower.includes('secure')){
-    desc.textContent = 'กล้องต้องการการเชื่อมต่อ HTTPS — กรุณาเปิดผ่าน https:// เท่านั้น';
-    document.getElementById('permSteps').style.display = 'none';
-    return;
+/* =========================================================
+   SAVE STORAGE
+========================================================= */
+
+function saveStorage(){
+
+  try{
+
+    localStorage.setItem(
+
+      STORAGE_KEY,
+
+      JSON.stringify({
+
+        userName:userName,
+
+        userAvatar:userAvatar,
+
+        stamps:stamps,
+
+        scanRecords:scanRecords
+
+      })
+
+    );
+
+  }catch(e){
+
+    console.warn(
+      'Storage save error',
+      e
+    );
+
   }
 
-  desc.textContent = 'แอปต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกน QR Code';
-  document.getElementById('permSteps').style.display = '';
-
-  if(br === 'ios'){
-    s1.textContent = 'ไปที่ Settings > Safari (หรือแอปที่เปิดหน้านี้)';
-    s2.textContent = 'เลือก Camera แล้วเปลี่ยนเป็น "Allow"';
-  } else if(br === 'android-chrome'){
-    s1.textContent = 'แตะไอคอนกุญแจ/กล้อง ในแถบ URL ด้านบน';
-    s2.textContent = 'เลือก Camera > Allow แล้ว Reload หน้า';
-  } else if(br === 'android-samsung'){
-    s1.textContent = 'แตะไอคอน i ในแถบ URL ของ Samsung Browser';
-    s2.textContent = 'เลือก Camera > Allow';
-  } else {
-    s1.textContent = 'คลิกไอคอนกล้องในแถบ address bar';
-    s2.textContent = 'เปลี่ยน Camera permission เป็น Allow';
-  }
 }
 
-/* ── Avatar grid ── */
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  function(){
+
+    loadStorage();
+
+    initAvatarGrid();
+
+    restoreUI();
+
+    document
+      .getElementById('profileModal')
+      .addEventListener(
+        'click',
+        function(e){
+
+          if(e.target === this){
+
+            this.classList.remove(
+              'open'
+            );
+
+          }
+
+        }
+      );
+
+  }
+);
+
+
+/* =========================================================
+   RESTORE UI
+========================================================= */
+
+function restoreUI(){
+
+  if(userName){
+
+    document
+      .getElementById('displayName')
+      .textContent =
+      userName;
+
+    document
+      .getElementById('nameAvatar')
+      .innerHTML =
+      userAvatar;
+
+  }
+
+  Object.keys(BOOTHS)
+    .forEach(function(booth){
+
+      if(stamps[booth]){
+
+        markBoothStamped(
+          booth
+        );
+
+      }
+
+    });
+
+  updateProgress();
+
+}
+
+
+/* =========================================================
+   AVATAR GRID
+========================================================= */
+
 function initAvatarGrid(){
-  const g = document.getElementById('avatarGrid');
-  g.innerHTML = '';
-  AVATARS.forEach(av => {
-    const d = document.createElement('div');
-    d.className = 'avatar-opt' + (av === userAvatar ? ' selected' : '');
-    d.innerHTML = av;
-    d.onclick = () => {
-      document.querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));
-      d.classList.add('selected');
-      userAvatar = av;
-    };
-    g.appendChild(d);
+
+  const grid =
+    document.getElementById(
+      'avatarGrid'
+    );
+
+  grid.innerHTML = '';
+
+  AVATARS.forEach(function(av){
+
+    const d =
+      document.createElement(
+        'div'
+      );
+
+    d.className =
+      'avatar-opt' +
+      (
+        av === userAvatar
+          ? ' selected'
+          : ''
+      );
+
+    d.innerHTML =
+      av;
+
+    d.onclick =
+      function(){
+
+        document
+          .querySelectorAll(
+            '.avatar-opt'
+          )
+          .forEach(
+            function(x){
+
+              x.classList.remove(
+                'selected'
+              );
+
+            }
+          );
+
+        d.classList.add(
+          'selected'
+        );
+
+        userAvatar =
+          av;
+
+      };
+
+    grid.appendChild(d);
+
   });
+
 }
+
+
+/* =========================================================
+   PROFILE MODAL
+========================================================= */
 
 function openProfileModal(){
-  document.getElementById('nameField').value = userName;
+
+  document
+    .getElementById('nameField')
+    .value =
+    userName;
+
   initAvatarGrid();
-  document.getElementById('profileModal').classList.add('open');
+
+  document
+    .getElementById('profileModal')
+    .classList.add(
+      'open'
+    );
+
+  setTimeout(
+    function(){
+
+      document
+        .getElementById('nameField')
+        .focus();
+
+    },
+    250
+  );
+
 }
+
+
+/* =========================================================
+   SAVE PROFILE
+========================================================= */
 
 function saveProfile(){
-  const val = document.getElementById('nameField').value.trim();
-  if(!val){ alert('กรุณากรอกชื่อของคุณ'); return; }
-  userName = val;
-  document.getElementById('displayName').textContent = userName;
-  document.getElementById('nameAvatar').innerHTML = userAvatar;
-  document.getElementById('editHint').textContent = 'แตะเพื่อแก้ไข';
-  document.getElementById('profileModal').classList.remove('open');
+
+  const val =
+    document
+      .getElementById('nameField')
+      .value
+      .trim();
+
+  if(!val){
+
+    showToast(
+      'กรุณากรอกชื่อของคุณ',
+      'error'
+    );
+
+    return;
+
+  }
+
+  userName =
+    val;
+
+  document
+    .getElementById('displayName')
+    .textContent =
+    userName;
+
+  document
+    .getElementById('nameAvatar')
+    .innerHTML =
+    userAvatar;
+
+  document
+    .getElementById('profileModal')
+    .classList.remove(
+      'open'
+    );
+
+  saveStorage();
+
+  showToast(
+    'บันทึกโปรไฟล์แล้ว',
+    'success'
+  );
+
 }
 
-document.getElementById('profileModal').addEventListener('click', function(e){
-  if(e.target === this) this.classList.remove('open');
-});
 
-/* ── Piece tap ── */
+/* =========================================================
+   PIECE TAP
+========================================================= */
+
 function handlePieceTap(booth){
-  if(stamps[booth]){ return; }
-  startScanFlow();
-}
-
-/* ── Progress ── */
-function updateProgress(){
-  const done = Object.values(stamps).filter(Boolean).length;
-  document.getElementById('progressFill').style.width = (done/3*100) + '%';
-  document.getElementById('progressText').textContent = done + ' / 3 บูท';
-  if(done === 3) document.getElementById('completeBanner').classList.add('show');
-}
-
-/* ── SCAN FLOW ── */
-function startScanFlow(){
-  if(scanBtnLocked) return;
-  if(!userName){ openProfileModal(); return; }
-  scanBtnLocked = true;
-  setTimeout(()=>{ scanBtnLocked = false; }, 2000);
-  openQR();
-}
-
-function openQR(){
-  document.getElementById('qrOverlay').classList.add('open');
-  document.getElementById('qrVideoWrap').style.display = 'block';
-  document.getElementById('permError').classList.remove('show');
-  document.getElementById('qrStatus').textContent = 'กำลังเปิดกล้อง...';
-  document.getElementById('qrStatus').className = 'qr-status';
-  requestCamera();
-}
-
-function requestCamera(){
-  /* Check API availability */
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    showPermError('getUserMedia API ไม่รองรับ — กรุณาใช้ Chrome หรือ Safari เวอร์ชันล่าสุด');
-    return;
-  }
-
-  /* iOS Safari requires getUserMedia to be called from a user gesture.
-     We call it here (this function is always triggered by a button tap). */
-  const constraints = {
-    video: {
-      facingMode: { ideal: 'environment' },
-      width:  { ideal: 1280 },
-      height: { ideal: 720 }
-    },
-    audio: false
-  };
-
-  navigator.mediaDevices.getUserMedia(constraints)
-    .then(handleStream)
-    .catch(handleCameraError);
-}
-
-function handleStream(s){
-  stream = s;
-  const vid = document.getElementById('qrVideo');
-  vid.srcObject = s;
-
-  /* Ensure video plays on iOS */
-  vid.setAttribute('playsinline', true);
-  vid.setAttribute('muted', true);
-  vid.muted = true;
-
-  const playPromise = vid.play();
-  if(playPromise !== undefined){
-    playPromise.catch(()=>{});
-  }
-
-  document.getElementById('qrStatus').textContent = 'จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม';
-
-  let waited = 0;
-  videoWaitInterval = setInterval(() => {
-    waited += 100;
-    if(vid.readyState >= 2 && vid.videoWidth > 0){
-      clearInterval(videoWaitInterval);
-      videoWaitInterval = null;
-      startDecode();
-    } else if(waited > 10000){
-      clearInterval(videoWaitInterval);
-      videoWaitInterval = null;
-      showPermError('กล้องเปิดช้าเกินไป — กรุณาลองใหม่');
-    }
-  }, 100);
-}
-
-function handleCameraError(err){
-  scanBtnLocked = false;
-  let msg = err.message || err.name || String(err);
-  console.warn('[QR] camera error:', err.name, err.message);
-
-  /* Map DOMException names to human-readable hints */
-  if(err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError'){
-    msg = 'Permission denied';
-  } else if(err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError'){
-    msg = 'not found';
-  } else if(err.name === 'NotReadableError' || err.name === 'TrackStartError'){
-    msg = 'กล้องถูกใช้งานโดยแอปอื่นอยู่ — ปิดแอปอื่นที่ใช้กล้องแล้วลองใหม่';
-  } else if(err.name === 'OverconstrainedError'){
-    /* Retry with simpler constraints */
-    navigator.mediaDevices.getUserMedia({ video:true, audio:false })
-      .then(handleStream)
-      .catch(e => showPermError(e.message));
-    return;
-  } else if(err.name === 'TypeError'){
-    msg = 'https';
-  }
-
-  showPermError(msg);
-}
-
-function showPermError(msg){
-  document.getElementById('qrVideoWrap').style.display = 'none';
-  document.getElementById('qrStatus').style.display = 'none';
-  const pe = document.getElementById('permError');
-  pe.classList.add('show');
-  setPermSteps(msg);
-  stopStream();
-}
-
-function retryCamera(){
-  document.getElementById('permError').classList.remove('show');
-  document.getElementById('qrVideoWrap').style.display = 'block';
-  document.getElementById('qrStatus').style.display = '';
-  document.getElementById('qrStatus').textContent = 'กำลังเปิดกล้อง...';
-  document.getElementById('qrStatus').className = 'qr-status';
-  requestCamera();
-}
-
-function startDecode(){
-  const vid = document.getElementById('qrVideo');
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  scanInterval = setInterval(() => {
-    if(scanLocked) return;
-    if(vid.readyState < 2 || vid.videoWidth === 0) return;
-    canvas.width = vid.videoWidth;
-    canvas.height = vid.videoHeight;
-    ctx.drawImage(vid, 0, 0);
-    try {
-      const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(img.data, img.width, img.height, { inversionAttempts:'dontInvert' });
-      if(code) handleQRCode(code.data);
-    } catch(e){}
-  }, 250);
-}
-
-function handleQRCode(data){
-  if(scanLocked) return;
-  const booth = Object.keys(BOOTHS).find(k => BOOTHS[k].qr === data);
-
-  if(!booth){
-    scanLocked = true;
-    setQRStatus('QR Code ไม่ถูกต้อง — กรุณาสแกน QR ของบูท WD Elevate', 'error');
-    if(navigator.vibrate) navigator.vibrate([80,40,80]);
-    setTimeout(()=>{ scanLocked = false; setQRStatus('จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม',''); }, 2200);
-    return;
-  }
 
   if(stamps[booth]){
-    scanLocked = true;
-    setQRStatus(BOOTHS[booth].name + ' สแกนแล้ว!', 'error');
-    setTimeout(()=>{ scanLocked = false; setQRStatus('จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม',''); }, 2200);
+
+    showToast(
+      BOOTHS[booth].name +
+      ' รับแสตมป์แล้ว',
+      'success'
+    );
+
     return;
+
   }
 
-  scanLocked = true;
-  if(navigator.vibrate) navigator.vibrate(220);
-  setQRStatus('สแกนสำเร็จ! ' + BOOTHS[booth].name, 'success');
+  currentScanBooth =
+    booth;
 
-  setTimeout(()=>{ window.open(BOOTHS[booth].form,'_blank'); }, 600);
+  startScanFlow();
 
-  setTimeout(()=>{
-    stamps[booth] = true;
-    document.getElementById('piece-'+booth).classList.add('stamped');
-    document.getElementById('status-'+booth).textContent = 'สแกนแล้ว';
-    updateProgress();
-    const rec = { avatar:userAvatar, name:userName, booth:booth, boothName:BOOTHS[booth].name, time:new Date().toLocaleString('th-TH') };
-    scanRecords.push(rec);
-    sendToSheet(rec);
-    closeQR();
-  }, 1400);
 }
 
-function setQRStatus(msg, cls){
-  const el = document.getElementById('qrStatus');
-  el.textContent = msg;
-  el.className = 'qr-status' + (cls ? ' '+cls : '');
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function updateProgress(){
+
+  const done =
+    Object.values(stamps)
+      .filter(Boolean)
+      .length;
+
+  const percent =
+    (done / 3) * 100;
+
+  document
+    .getElementById('progressFill')
+    .style.width =
+    percent + '%';
+
+  document
+    .getElementById('progressText')
+    .textContent =
+    done +
+    ' / 3 บูท';
+
+  const banner =
+    document
+      .getElementById(
+        'completeBanner'
+      );
+
+  if(done === 3){
+
+    banner.classList.add(
+      'show'
+    );
+
+    document
+      .getElementById(
+        'mainScanBtn'
+      )
+      .disabled =
+      true;
+
+  }else{
+
+    banner.classList.remove(
+      'show'
+    );
+
+    document
+      .getElementById(
+        'mainScanBtn'
+      )
+      .disabled =
+      false;
+
+  }
+
 }
+
+
+/* =========================================================
+   MARK BOOTH
+========================================================= */
+
+function markBoothStamped(
+  booth
+){
+
+  const piece =
+    document.getElementById(
+      'piece-' + booth
+    );
+
+  const status =
+    document.getElementById(
+      'status-' + booth
+    );
+
+  if(piece){
+
+    piece.classList.add(
+      'stamped'
+    );
+
+  }
+
+  if(status){
+
+    status.textContent =
+      'สแกนแล้ว ✓';
+
+  }
+
+}
+
+
+/* =========================================================
+   SCAN FLOW
+========================================================= */
+
+function startScanFlow(){
+
+  if(scanBtnLocked)
+    return;
+
+  if(Object.values(stamps)
+      .every(Boolean)){
+
+    showToast(
+      'คุณสแกนครบทั้ง 3 บูทแล้ว',
+      'success'
+    );
+
+    return;
+
+  }
+
+  if(!userName){
+
+    openProfileModal();
+
+    return;
+
+  }
+
+  scanBtnLocked =
+    true;
+
+  setTimeout(
+    function(){
+
+      scanBtnLocked =
+        false;
+
+    },
+    1500
+  );
+
+  openQR();
+
+}
+
+
+/* =========================================================
+   OPEN QR
+========================================================= */
+
+function openQR(){
+
+  document
+    .getElementById(
+      'qrOverlay'
+    )
+    .classList.add(
+      'open'
+    );
+
+  document
+    .getElementById(
+      'qrVideoWrap'
+    )
+    .style.display =
+    'block';
+
+  document
+    .getElementById(
+      'permError'
+    )
+    .classList.remove(
+      'show'
+    );
+
+  const status =
+    document
+      .getElementById(
+        'qrStatus'
+      );
+
+  status.style.display =
+    '';
+
+  status.textContent =
+    'กำลังเปิดกล้อง...';
+
+  status.className =
+    'qr-status';
+
+  requestCamera();
+
+}
+
+
+/* =========================================================
+   DETECT BROWSER
+========================================================= */
+
+function detectBrowser(){
+
+  const ua =
+    navigator.userAgent;
+
+  if(
+    /iPhone|iPad|iPod/
+      .test(ua)
+  ){
+
+    return 'ios';
+
+  }
+
+  if(
+    /Android/
+      .test(ua)
+  ){
+
+    if(
+      /Chrome/
+        .test(ua)
+    ){
+
+      return 'android-chrome';
+
+    }
+
+    if(
+      /Samsung/
+        .test(ua)
+    ){
+
+      return 'android-samsung';
+
+    }
+
+    return 'android';
+
+  }
+
+  return 'desktop';
+
+}
+
+
+/* =========================================================
+   CAMERA PERMISSION
+========================================================= */
+
+function setPermSteps(
+  errMsg
+){
+
+  const br =
+    detectBrowser();
+
+  const s1 =
+    document.getElementById(
+      'permStep1'
+    );
+
+  const s2 =
+    document.getElementById(
+      'permStep2'
+    );
+
+  const desc =
+    document.getElementById(
+      'permDesc'
+    );
+
+  const errLower =
+    (
+      errMsg || ''
+    ).toLowerCase();
+
+  if(
+    errLower.includes(
+      'not found'
+    ) ||
+    errLower.includes(
+      'notfound'
+    )
+  ){
+
+    desc.textContent =
+      'ไม่พบกล้องในอุปกรณ์นี้ กรุณาลองบนมือถือที่มีกล้อง';
+
+    document
+      .getElementById(
+        'permSteps'
+      )
+      .style.display =
+      'none';
+
+    return;
+
+  }
+
+  if(
+    errLower.includes(
+      'https'
+    ) ||
+    errLower.includes(
+      'secure'
+    )
+  ){
+
+    desc.textContent =
+      'กล้องต้องการการเชื่อมต่อ HTTPS — กรุณาเปิดผ่าน https:// เท่านั้น';
+
+    document
+      .getElementById(
+        'permSteps'
+      )
+      .style.display =
+      'none';
+
+    return;
+
+  }
+
+  desc.textContent =
+    'แอปต้องการสิทธิ์เข้าถึงกล้องเพื่อสแกน QR Code';
+
+  document
+    .getElementById(
+      'permSteps'
+    )
+    .style.display =
+    '';
+
+  if(br === 'ios'){
+
+    s1.textContent =
+      'ไปที่ Settings > Safari';
+
+    s2.textContent =
+      'เลือก Camera แล้วเปลี่ยนเป็น Allow';
+
+  }else if(
+    br === 'android-chrome'
+  ){
+
+    s1.textContent =
+      'แตะไอคอนกุญแจ/กล้อง ในแถบ URL';
+
+    s2.textContent =
+      'เลือก Camera > Allow แล้ว Reload หน้า';
+
+  }else if(
+    br === 'android-samsung'
+  ){
+
+    s1.textContent =
+      'แตะไอคอน i ในแถบ URL';
+
+    s2.textContent =
+      'เลือก Camera > Allow';
+
+  }else{
+
+    s1.textContent =
+      'คลิกไอคอนกล้องในแถบ address bar';
+
+    s2.textContent =
+      'เปลี่ยน Camera permission เป็น Allow';
+
+  }
+
+}
+
+
+/* =========================================================
+   REQUEST CAMERA
+========================================================= */
+
+function requestCamera(){
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+
+    showPermError(
+      'getUserMedia API ไม่รองรับ — กรุณาใช้ Chrome หรือ Safari เวอร์ชันล่าสุด'
+    );
+
+    return;
+
+  }
+
+  const constraints = {
+
+    video:{
+
+      facingMode:{
+        ideal:'environment'
+      },
+
+      width:{
+        ideal:1280
+      },
+
+      height:{
+        ideal:720
+      }
+
+    },
+
+    audio:false
+
+  };
+
+  navigator.mediaDevices
+    .getUserMedia(
+      constraints
+    )
+    .then(
+      handleStream
+    )
+    .catch(
+      handleCameraError
+    );
+
+}
+
+
+/* =========================================================
+   CAMERA STREAM
+========================================================= */
+
+function handleStream(s){
+
+  stream =
+    s;
+
+  const vid =
+    document.getElementById(
+      'qrVideo'
+    );
+
+  vid.srcObject =
+    s;
+
+  vid.setAttribute(
+    'playsinline',
+    true
+  );
+
+  vid.setAttribute(
+    'muted',
+    true
+  );
+
+  vid.muted =
+    true;
+
+  const playPromise =
+    vid.play();
+
+  if(
+    playPromise !== undefined
+  ){
+
+    playPromise.catch(
+      function(){}
+    );
+
+  }
+
+  document
+    .getElementById(
+      'qrStatus'
+    )
+    .textContent =
+    'จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม';
+
+  let waited =
+    0;
+
+  videoWaitInterval =
+    setInterval(
+      function(){
+
+        waited += 100;
+
+        if(
+          vid.readyState >= 2 &&
+          vid.videoWidth > 0
+        ){
+
+          clearInterval(
+            videoWaitInterval
+          );
+
+          videoWaitInterval =
+            null;
+
+          startDecode();
+
+        }else if(
+          waited > 10000
+        ){
+
+          clearInterval(
+            videoWaitInterval
+          );
+
+          videoWaitInterval =
+            null;
+
+          showPermError(
+            'กล้องเปิดช้าเกินไป — กรุณาลองใหม่'
+          );
+
+        }
+
+      },
+      100
+    );
+
+}
+
+
+/* =========================================================
+   CAMERA ERROR
+========================================================= */
+
+function handleCameraError(
+  err
+){
+
+  scanBtnLocked =
+    false;
+
+  let msg =
+    err.message ||
+    err.name ||
+    String(err);
+
+  console.warn(
+    '[QR] camera error:',
+    err.name,
+    err.message
+  );
+
+  if(
+    err.name ===
+    'NotAllowedError' ||
+    err.name ===
+    'PermissionDeniedError'
+  ){
+
+    msg =
+      'Permission denied';
+
+  }else if(
+    err.name ===
+    'NotFoundError' ||
+    err.name ===
+    'DevicesNotFoundError'
+  ){
+
+    msg =
+      'not found';
+
+  }else if(
+    err.name ===
+    'NotReadableError' ||
+    err.name ===
+    'TrackStartError'
+  ){
+
+    msg =
+      'กล้องถูกใช้งานโดยแอปอื่นอยู่ — ปิดแอปอื่นที่ใช้กล้องแล้วลองใหม่';
+
+  }else if(
+    err.name ===
+    'OverconstrainedError'
+  ){
+
+    navigator.mediaDevices
+      .getUserMedia({
+
+        video:true,
+        audio:false
+
+      })
+      .then(
+        handleStream
+      )
+      .catch(
+        function(e){
+
+          showPermError(
+            e.message
+          );
+
+        }
+      );
+
+    return;
+
+  }else if(
+    err.name ===
+    'TypeError'
+  ){
+
+    msg =
+      'https';
+
+  }
+
+  showPermError(
+    msg
+  );
+
+}
+
+
+/* =========================================================
+   PERMISSION ERROR
+========================================================= */
+
+function showPermError(
+  msg
+){
+
+  document
+    .getElementById(
+      'qrVideoWrap'
+    )
+    .style.display =
+    'none';
+
+  document
+    .getElementById(
+      'qrStatus'
+    )
+    .style.display =
+    'none';
+
+  document
+    .getElementById(
+      'permError'
+    )
+    .classList.add(
+      'show'
+    );
+
+  setPermSteps(
+    msg
+  );
+
+  stopStream();
+
+}
+
+
+/* =========================================================
+   RETRY CAMERA
+========================================================= */
+
+function retryCamera(){
+
+  document
+    .getElementById(
+      'permError'
+    )
+    .classList.remove(
+      'show'
+    );
+
+  document
+    .getElementById(
+      'qrVideoWrap'
+    )
+    .style.display =
+    'block';
+
+  document
+    .getElementById(
+      'qrStatus'
+    )
+    .style.display =
+    '';
+
+  document
+    .getElementById(
+      'qrStatus'
+    )
+    .textContent =
+    'กำลังเปิดกล้อง...';
+
+  requestCamera();
+
+}
+
+
+/* =========================================================
+   QR DECODE
+========================================================= */
+
+function startDecode(){
+
+  const vid =
+    document.getElementById(
+      'qrVideo'
+    );
+
+  const canvas =
+    document.createElement(
+      'canvas'
+    );
+
+  const ctx =
+    canvas.getContext(
+      '2d',
+      {
+        willReadFrequently:true
+      }
+    );
+
+  if(scanInterval){
+
+    clearInterval(
+      scanInterval
+    );
+
+  }
+
+  scanInterval =
+    setInterval(
+      function(){
+
+        if(scanLocked)
+          return;
+
+        if(
+          vid.readyState < 2 ||
+          vid.videoWidth === 0
+        )
+          return;
+
+        canvas.width =
+          vid.videoWidth;
+
+        canvas.height =
+          vid.videoHeight;
+
+        ctx.drawImage(
+          vid,
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+        try{
+
+          const img =
+            ctx.getImageData(
+              0,
+              0,
+              canvas.width,
+              canvas.height
+            );
+
+          const code =
+            jsQR(
+              img.data,
+              img.width,
+              img.height,
+              {
+                inversionAttempts:
+                  'dontInvert'
+              }
+            );
+
+          if(code){
+
+            handleQRCode(
+              code.data
+            );
+
+          }
+
+        }catch(e){
+
+          console.warn(
+            'QR decode error',
+            e
+          );
+
+        }
+
+      },
+      200
+    );
+
+}
+
+
+/* =========================================================
+   NORMALIZE QR
+========================================================= */
+
+function normalizeQR(
+  data
+){
+
+  return String(
+    data || ''
+  )
+  .trim();
+
+}
+
+
+/* =========================================================
+   FIND BOOTH FROM QR
+========================================================= */
+
+function findBoothFromQR(
+  data
+){
+
+  const value =
+    normalizeQR(
+      data
+    );
+
+  const boothKeys =
+    Object.keys(
+      BOOTHS
+    );
+
+  for(
+    let i=0;
+    i<boothKeys.length;
+    i++
+  ){
+
+    const key =
+      boothKeys[i];
+
+    const booth =
+      BOOTHS[key];
+
+    /*
+     * รองรับ QR แบบเดิม
+     */
+
+    if(
+      value ===
+      booth.qr
+    ){
+
+      return key;
+
+    }
+
+    /*
+     * รองรับ QR ที่เป็น
+     * URL Smartsheet
+     */
+
+    if(
+      value ===
+      booth.form
+    ){
+
+      return key;
+
+    }
+
+    /*
+     * รองรับ QR URL
+     * ที่มี query string
+     */
+
+    try{
+
+      const scannedURL =
+        new URL(
+          value
+        );
+
+      const formURL =
+        new URL(
+          booth.form
+        );
+
+      if(
+        scannedURL.origin ===
+        formURL.origin &&
+        scannedURL.pathname ===
+        formURL.pathname
+      ){
+
+        return key;
+
+      }
+
+    }catch(e){}
+
+  }
+
+  return null;
+
+}
+
+
+/* =========================================================
+   HANDLE QR
+========================================================= */
+
+function handleQRCode(
+  data
+){
+
+  if(scanLocked)
+    return;
+
+  const booth =
+    findBoothFromQR(
+      data
+    );
+
+  /*
+   * QR ไม่ใช่ของระบบ
+   */
+
+  if(!booth){
+
+    scanLocked =
+      true;
+
+    setQRStatus(
+      'QR Code ไม่ถูกต้อง — กรุณาสแกน QR ของ WD Elevate',
+      'error'
+    );
+
+    if(navigator.vibrate){
+
+      navigator.vibrate(
+        [80,40,80]
+      );
+
+    }
+
+    setTimeout(
+      function(){
+
+        scanLocked =
+          false;
+
+        setQRStatus(
+          'จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม',
+          ''
+        );
+
+      },
+      2200
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * บูทนี้สแกนแล้ว
+   */
+
+  if(stamps[booth]){
+
+    scanLocked =
+      true;
+
+    setQRStatus(
+      BOOTHS[booth].name +
+      ' สแกนแล้ว!',
+      'error'
+    );
+
+    setTimeout(
+      function(){
+
+        scanLocked =
+          false;
+
+        setQRStatus(
+          'จ่อ QR Code ของบูทในกรอบสี่เหลี่ยม',
+          ''
+        );
+
+      },
+      1800
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * SUCCESS
+   */
+
+  scanLocked =
+    true;
+
+  if(navigator.vibrate){
+
+    navigator.vibrate(
+      [100,50,150]
+    );
+
+  }
+
+  setQRStatus(
+    '✓ สแกนสำเร็จ! ' +
+    BOOTHS[booth].name,
+    'success'
+  );
+
+
+  /*
+   * บันทึก Stamp
+   * ทันที
+   */
+
+  stamps[booth] =
+    true;
+
+  markBoothStamped(
+    booth
+  );
+
+  updateProgress();
+
+
+  /*
+   * สร้าง Record
+   */
+
+  const rec = {
+
+    id:
+      Date.now() +
+      '-' +
+      Math.random()
+        .toString(36)
+        .slice(2),
+
+    avatar:
+      userAvatar,
+
+    name:
+      userName,
+
+    booth:
+      booth,
+
+    boothName:
+      BOOTHS[booth].name,
+
+    time:
+      new Date()
+        .toLocaleString(
+          'th-TH'
+        )
+
+  };
+
+
+  scanRecords.push(
+    rec
+  );
+
+  saveStorage();
+
+  sendToSheet(
+    rec
+  );
+
+
+  /*
+   * เปิด Smartsheet
+   */
+
+  setTimeout(
+    function(){
+
+      window.open(
+        BOOTHS[booth].form,
+        '_blank'
+      );
+
+    },
+    500
+  );
+
+
+  /*
+   * ปิด Scanner
+   */
+
+  setTimeout(
+    function(){
+
+      closeQR();
+
+      showToast(
+        'รับแสตมป์ ' +
+        BOOTHS[booth].name +
+        ' แล้ว ✓',
+        'success'
+      );
+
+    },
+    1100
+  );
+
+}
+
+
+/* =========================================================
+   QR STATUS
+========================================================= */
+
+function setQRStatus(
+  msg,
+  cls
+){
+
+  const el =
+    document.getElementById(
+      'qrStatus'
+    );
+
+  el.textContent =
+    msg;
+
+  el.className =
+    'qr-status' +
+    (
+      cls
+        ? ' ' + cls
+        : ''
+    );
+
+}
+
+
+/* =========================================================
+   STOP CAMERA
+========================================================= */
 
 function stopStream(){
-  if(scanInterval){ clearInterval(scanInterval); scanInterval = null; }
-  if(videoWaitInterval){ clearInterval(videoWaitInterval); videoWaitInterval = null; }
-  if(stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
-  const vid = document.getElementById('qrVideo');
-  vid.srcObject = null;
+
+  if(scanInterval){
+
+    clearInterval(
+      scanInterval
+    );
+
+    scanInterval =
+      null;
+
+  }
+
+  if(videoWaitInterval){
+
+    clearInterval(
+      videoWaitInterval
+    );
+
+    videoWaitInterval =
+      null;
+
+  }
+
+  if(stream){
+
+    stream
+      .getTracks()
+      .forEach(
+        function(t){
+
+          t.stop();
+
+        }
+      );
+
+    stream =
+      null;
+
+  }
+
+  const vid =
+    document.getElementById(
+      'qrVideo'
+    );
+
+  if(vid){
+
+    vid.pause();
+
+    vid.srcObject =
+      null;
+
+  }
+
 }
+
+
+/* =========================================================
+   CLOSE QR
+========================================================= */
 
 function closeQR(){
+
   stopStream();
-  scanLocked = false;
-  scanBtnLocked = false;
-  document.getElementById('qrOverlay').classList.remove('open');
-  document.getElementById('qrStatus').style.display = '';
-  document.getElementById('qrVideoWrap').style.display = 'block';
-  document.getElementById('permError').classList.remove('show');
+
+  scanLocked =
+    false;
+
+  scanBtnLocked =
+    false;
+
+  currentScanBooth =
+    null;
+
+  document
+    .getElementById(
+      'qrOverlay'
+    )
+    .classList.remove(
+      'open'
+    );
+
+  document
+    .getElementById(
+      'qrStatus'
+    )
+    .style.display =
+    '';
+
+  document
+    .getElementById(
+      'qrVideoWrap'
+    )
+    .style.display =
+    'block';
+
+  document
+    .getElementById(
+      'permError'
+    )
+    .classList.remove(
+      'show'
+    );
+
 }
 
-function sendToSheet(rec){
-  const body = new URLSearchParams({ name:rec.name, booth:rec.boothName, time:rec.time, avatar:rec.avatar });
-  fetch(SCRIPT_URL,{ method:'POST', mode:'no-cors', body }).catch(()=>{});
+
+/* =========================================================
+   SEND TO GOOGLE SHEET
+========================================================= */
+
+function sendToSheet(
+  rec
+){
+
+  /*
+   * ถ้ายังไม่ได้ตั้ง Google Apps Script
+   * ไม่ต้องทำอะไร
+   */
+
+  if(
+    !SCRIPT_URL ||
+    SCRIPT_URL.includes(
+      'YOUR_SCRIPT_ID'
+    )
+  ){
+
+    return;
+
+  }
+
+  const body =
+    new URLSearchParams({
+
+      name:
+        rec.name,
+
+      booth:
+        rec.boothName,
+
+      time:
+        rec.time,
+
+      avatar:
+        rec.avatar
+
+    });
+
+  fetch(
+    SCRIPT_URL,
+    {
+
+      method:'POST',
+
+      mode:'no-cors',
+
+      body:body
+
+    }
+  )
+  .catch(
+    function(err){
+
+      console.warn(
+        'Google Sheet error',
+        err
+      );
+
+    }
+  );
+
 }
 
-/* ── Admin ── */
-function openAdmin(){ document.getElementById('adminPage').classList.add('open'); }
-function closeAdmin(){ document.getElementById('adminPage').classList.remove('open'); }
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+function openAdmin(){
+
+  document
+    .getElementById(
+      'adminPage'
+    )
+    .classList.add(
+      'open'
+    );
+
+  if(adminAuthed){
+
+    renderAdminDash();
+
+  }
+
+}
+
+
+/* =========================================================
+   CLOSE ADMIN
+========================================================= */
+
+function closeAdmin(){
+
+  document
+    .getElementById(
+      'adminPage'
+    )
+    .classList.remove(
+      'open'
+    );
+
+}
+
+
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
 
 function doLogin(){
-  const u = document.getElementById('adminUser').value.trim();
-  const p = document.getElementById('adminPass').value;
-  if(u==='admin' && p==='1234'){
-    adminAuthed = true;
-    document.getElementById('adminLogin').style.display = 'none';
-    const dash = document.getElementById('adminDash');
-    dash.style.display = 'flex';
+
+  const u =
+    document
+      .getElementById(
+        'adminUser'
+      )
+      .value
+      .trim();
+
+  const p =
+    document
+      .getElementById(
+        'adminPass'
+      )
+      .value;
+
+  /*
+   * ค่าเดิมจากระบบของคุณ
+   */
+
+  if(
+    u === 'admin' &&
+    p === '1234'
+  ){
+
+    adminAuthed =
+      true;
+
+    document
+      .getElementById(
+        'adminLogin'
+      )
+      .style.display =
+      'none';
+
+    const dash =
+      document.getElementById(
+        'adminDash'
+      );
+
+    dash.style.display =
+      'flex';
+
     renderAdminDash();
-  } else {
-    document.getElementById('loginErr').textContent = 'Username หรือ Password ไม่ถูกต้อง';
+
+    showToast(
+      'เข้าสู่ระบบ Admin สำเร็จ',
+      'success'
+    );
+
+  }else{
+
+    document
+      .getElementById(
+        'loginErr'
+      )
+      .textContent =
+      'Username หรือ Password ไม่ถูกต้อง';
+
   }
+
 }
+
+
+/* =========================================================
+   ADMIN DASHBOARD
+========================================================= */
 
 function renderAdminDash(){
-  const names = [...new Set(scanRecords.map(r=>r.name))];
-  document.getElementById('statTotal').textContent = names.length;
-  const complete = names.filter(n=>{
-    const recs = scanRecords.filter(r=>r.name===n);
-    return ['smart','vf','tpe'].every(b=>recs.some(r=>r.booth===b));
-  });
-  document.getElementById('statComplete').textContent = complete.length;
-  document.getElementById('statSmart').textContent = scanRecords.filter(r=>r.booth==='smart').length;
-  document.getElementById('statVF').textContent = scanRecords.filter(r=>r.booth==='vf').length;
-  const tbody = document.getElementById('adminTableBody');
-  tbody.innerHTML = '';
-  scanRecords.forEach(r=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = '<td style="font-size:18px">'+r.avatar+'</td><td>'+r.name+'</td>'
-      +'<td>'+(r.booth==='smart'?'<span style="color:#93C5FD">&#10003;</span>':'')+'</td>'
-      +'<td>'+(r.booth==='vf'?'<span style="color:#c4b5fd">&#10003;</span>':'')+'</td>'
-      +'<td>'+(r.booth==='tpe'?'<span style="color:#5eead4">&#10003;</span>':'')+'</td>'
-      +'<td style="color:rgba(255,255,255,.4);font-size:10px">'+r.time+'</td>';
-    tbody.appendChild(tr);
-  });
+
+  /*
+   * สร้างรายชื่อไม่ซ้ำ
+   */
+
+  const names =
+    [
+      ...new Set(
+        scanRecords.map(
+          function(r){
+            return r.name;
+          }
+        )
+      )
+    ];
+
+
+  /*
+   * Total
+   */
+
+  document
+    .getElementById(
+      'statTotal'
+    )
+    .textContent =
+    names.length;
+
+
+  /*
+   * Complete
+   */
+
+  const complete =
+    names.filter(
+      function(name){
+
+        const recs =
+          scanRecords.filter(
+            function(r){
+
+              return r.name === name;
+
+            }
+          );
+
+        return [
+          'smart',
+          'vf',
+          'tpe'
+        ].every(
+          function(b){
+
+            return recs.some(
+              function(r){
+
+                return r.booth === b;
+
+              }
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      'statComplete'
+    )
+    .textContent =
+    complete.length;
+
+
+  /*
+   * Booth counts
+   */
+
+  document
+    .getElementById(
+      'statSmart'
+    )
+    .textContent =
+    scanRecords.filter(
+      function(r){
+
+        return r.booth ===
+          'smart';
+
+      }
+    ).length;
+
+
+  document
+    .getElementById(
+      'statVF'
+    )
+    .textContent =
+    scanRecords.filter(
+      function(r){
+
+        return r.booth ===
+          'vf';
+
+      }
+    ).length;
+
+
+  document
+    .getElementById(
+      'statTPE'
+    )
+    .textContent =
+    scanRecords.filter(
+      function(r){
+
+        return r.booth ===
+          'tpe';
+
+      }
+    ).length;
+
+
+  /*
+   * Table
+   */
+
+  const tbody =
+    document.getElementById(
+      'adminTableBody'
+    );
+
+  tbody.innerHTML =
+    '';
+
+
+  /*
+   * สร้าง 1 row ต่อผู้เข้าร่วม
+   */
+
+  const uniqueNames =
+    [...new Set(
+      scanRecords.map(
+        function(r){
+          return r.name;
+        }
+      )
+    )];
+
+
+  uniqueNames.forEach(
+    function(name){
+
+      const recs =
+        scanRecords.filter(
+          function(r){
+
+            return r.name ===
+              name;
+
+          }
+        );
+
+
+      const avatar =
+        recs.length
+          ? recs[0].avatar
+          : '&#x1F464;';
+
+
+      const latest =
+        recs.length
+          ? recs[recs.length-1].time
+          : '';
+
+
+      const hasSmart =
+        recs.some(
+          function(r){
+            return r.booth ===
+              'smart';
+          }
+        );
+
+
+      const hasVF =
+        recs.some(
+          function(r){
+            return r.booth ===
+              'vf';
+          }
+        );
+
+
+      const hasTPE =
+        recs.some(
+          function(r){
+            return r.booth ===
+              'tpe';
+          }
+        );
+
+
+      const tr =
+        document.createElement(
+          'tr'
+        );
+
+
+      tr.innerHTML =
+
+        '<td style="font-size:18px">' +
+          avatar +
+        '</td>' +
+
+        '<td>' +
+          escapeHTML(name) +
+        '</td>' +
+
+        '<td>' +
+          (
+            hasSmart
+              ? '<span style="color:#93C5FD;font-size:16px">&#10003;</span>'
+              : '<span style="opacity:.2">—</span>'
+          ) +
+        '</td>' +
+
+        '<td>' +
+          (
+            hasVF
+              ? '<span style="color:#c4b5fd;font-size:16px">&#10003;</span>'
+              : '<span style="opacity:.2">—</span>'
+          ) +
+        '</td>' +
+
+        '<td>' +
+          (
+            hasTPE
+              ? '<span style="color:#fde68a;font-size:16px">&#10003;</span>'
+              : '<span style="opacity:.2">—</span>'
+          ) +
+        '</td>' +
+
+        '<td style="color:rgba(255,255,255,.4);font-size:10px">' +
+          escapeHTML(latest) +
+        '</td>';
+
+
+      tbody.appendChild(
+        tr
+      );
+
+    }
+  );
+
 }
 
-function exportCSV(){
-  const rows = [['Avatar','Name','Booth','Time']];
-  scanRecords.forEach(r=>rows.push([r.avatar, r.name, r.boothName, r.time]));
-  const csv = rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
-  a.download = 'wd-elevate-stamp-'+Date.now()+'.csv';
-  a.click();
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(
+  value
+){
+
+  return String(
+    value || ''
+  )
+  .replace(
+    /&/g,
+    '&amp;'
+  )
+  .replace(
+    /</g,
+    '&lt;'
+  )
+  .replace(
+    />/g,
+    '&gt;'
+  )
+  .replace(
+    /"/g,
+    '&quot;'
+  )
+  .replace(
+    /'/g,
+    '&#039;'
+  );
+
 }
+
+
+/* =========================================================
+   EXPORT CSV
+========================================================= */
+
+function exportCSV(){
+
+  if(!scanRecords.length){
+
+    showToast(
+      'ยังไม่มีข้อมูลสำหรับ Export',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  const rows = [
+
+    [
+      'Avatar',
+      'Name',
+      'Booth',
+      'Time'
+    ]
+
+  ];
+
+
+  scanRecords.forEach(
+    function(r){
+
+      rows.push([
+
+        r.avatar,
+
+        r.name,
+
+        r.boothName,
+
+        r.time
+
+      ]);
+
+    }
+  );
+
+
+  const csv =
+    rows
+      .map(
+        function(row){
+
+          return row
+            .map(
+              function(c){
+
+                return '"' +
+                  String(c)
+                    .replace(
+                      /"/g,
+                      '""'
+                    ) +
+                  '"';
+
+              }
+            )
+            .join(',');
+
+        }
+      )
+      .join('\n');
+
+
+  const blob =
+    new Blob(
+      [
+        '\uFEFF' +
+        csv
+      ],
+      {
+        type:
+          'text/csv;charset=utf-8;'
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const a =
+    document.createElement(
+      'a'
+    );
+
+  a.href =
+    url;
+
+  a.download =
+    'WD-Elevate-Stamp-' +
+    Date.now() +
+    '.csv';
+
+  document.body.appendChild(
+    a
+  );
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  showToast(
+    'Export CSV สำเร็จ',
+    'success'
+  );
+
+}
+
+
+/* =========================================================
+   RESET DATA
+========================================================= */
+
+function resetAllData(){
+
+  const ok =
+    confirm(
+      'ต้องการล้างข้อมูล Stamp ทั้งหมดในเครื่องนี้หรือไม่?\n\nข้อมูลชื่อ, Stamp และประวัติการสแกนจะถูกลบ'
+    );
+
+  if(!ok)
+    return;
+
+
+  userName =
+    '';
+
+  userAvatar =
+    '&#x1F464;';
+
+  stamps = {
+
+    smart:false,
+    vf:false,
+    tpe:false
+
+  };
+
+  scanRecords =
+    [];
+
+
+  localStorage.removeItem(
+    STORAGE_KEY
+  );
+
+
+  document
+    .getElementById(
+      'displayName'
+    )
+    .textContent =
+    'กรอกชื่อของคุณ';
+
+
+  document
+    .getElementById(
+      'nameAvatar'
+    )
+    .innerHTML =
+    userAvatar;
+
+
+  Object.keys(BOOTHS)
+    .forEach(
+      function(booth){
+
+        const piece =
+          document.getElementById(
+            'piece-' + booth
+          );
+
+        const status =
+          document.getElementById(
+            'status-' + booth
+          );
+
+        if(piece){
+
+          piece.classList.remove(
+            'stamped'
+          );
+
+        }
+
+        if(status){
+
+          status.textContent =
+            'แตะเพื่อสแกน';
+
+        }
+
+      }
+    );
+
+
+  updateProgress();
+
+  renderAdminDash();
+
+
+  showToast(
+    'ล้างข้อมูลเรียบร้อยแล้ว',
+    'success'
+  );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer =
+  null;
+
+
+function showToast(
+  message,
+  type
+){
+
+  const toast =
+    document.getElementById(
+      'toast'
+    );
+
+  toast.textContent =
+    message;
+
+  toast.className =
+    'toast' +
+    (
+      type
+        ? ' ' + type
+        : ''
+    );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  setTimeout(
+    function(){
+
+      toast.classList.add(
+        'show'
+      );
+
+    },
+    20
+  );
+
+
+  toastTimer =
+    setTimeout(
+      function(){
+
+        toast.classList.remove(
+          'show'
+        );
+
+      },
+      2600
+    );
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  'keydown',
+  function(e){
+
+    /*
+     * ESC ปิด Scanner
+     */
+
+    if(
+      e.key === 'Escape'
+    ){
+
+      closeQR();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   PAGE VISIBILITY
+========================================================= */
+
+document.addEventListener(
+  'visibilitychange',
+  function(){
+
+    /*
+     * ถ้าออกจากหน้า
+     * ให้หยุดกล้อง
+     */
+
+    if(
+      document.hidden &&
+      stream
+    ){
+
+      stopStream();
+
+    }
+
+  }
+);
+
 </script>
+
 </body>
 </html>
